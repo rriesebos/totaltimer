@@ -35,8 +35,8 @@ struct TimerView: View {
     }
     
     // MARK: Methods
-    private func setTimer(time: Time) {
-        self.timerModel.set(time: time)
+    private func setTimer(seconds: Int) {
+        self.timerModel.set(seconds: seconds)
 
         self.progress = 0
         
@@ -146,7 +146,7 @@ struct TimerView: View {
                 ProgressCircle(color: Color(self.timerModel.color), progress: self.progress)
                 
                 VStack(alignment: .center, spacing: 16) {
-                    TimeView(time: self.timerModel.time)
+                    TimeView(seconds: self.timerModel.seconds)
                         .onTapGesture {
                             self.showTimePicker = true
                             self.resetTimer()
@@ -184,8 +184,8 @@ struct TimerView: View {
             Spacer()
         }
         .sheet(isPresented: self.$showTimePicker) {
-            TimePicker() { newTime in
-                self.setTimer(time: newTime)
+            TimePicker() { seconds in
+                self.setTimer(seconds: seconds)
                 self.isPlaying = true
             }
         }

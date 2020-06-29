@@ -11,7 +11,9 @@ import CoreData
 import Combine
 import os.log
 
-class TimerModel: ObservableObject {
+class TimerModel: ObservableObject, Identifiable {
+    
+    let id = UUID()
     
     var timerData: TimerData? = nil
     
@@ -20,19 +22,19 @@ class TimerModel: ObservableObject {
     @Published var color: UIColor
     
     @Published var timerLengthInSeconds = 0
-    @Published var time = Time()
+    @Published var seconds = 0
     
     @Published var timer = Timer.publish(every: 1, on: .main, in: .common)
     private var cancellable: Cancellable? = nil
-    
-    var seconds: Int {
-        return self.time.seconds
-    }
     
     
     init(label: String, totalSeconds: Int, color: UIColor) {
         self.label = label
         self.totalSeconds = totalSeconds
+        
+        self.timerLengthInSeconds = Int(totalSeconds)
+        self.seconds = totalSeconds
+        
         self.color = color
     }
     
@@ -43,17 +45,17 @@ class TimerModel: ObservableObject {
         self.totalSeconds = Int(timerData.totalSeconds)
         
         self.timerLengthInSeconds = Int(timerData.totalSeconds)
-        self.time = Time(seconds: Int(timerData.totalSeconds))
+        self.seconds = Int(timerData.totalSeconds)
         
         // TODO: convert color
         self.color = UIColor.blue
     }
     
-    func set(time: Time) {
-        self.totalSeconds = time.seconds
+    func set(seconds: Int) {
+        self.totalSeconds = seconds
         
-        self.timerLengthInSeconds = time.seconds
-        self.time.set(time: time)
+        self.timerLengthInSeconds = seconds
+        self.seconds = seconds
     }
     
     func save(managedObjectContext: NSManagedObjectContext) {
@@ -70,25 +72,25 @@ class TimerModel: ObservableObject {
     
     func reset() {
         self.timerLengthInSeconds = self.totalSeconds
-        self.time.set(seconds: self.timerLengthInSeconds)
+        self.seconds = self.totalSeconds
     }
     
     func setTime(seconds: Double) {
-        self.time.set(seconds: seconds)
+        self.seconds = lround(seconds)
     }
     
     func addTime(seconds: Int) {
         self.timerLengthInSeconds = min(self.timerLengthInSeconds + seconds, Time.maxSeconds)
-        self.time.add(seconds: seconds)
+        self.seconds = min(self.seconds + seconds, Time.maxSeconds)
     }
     
     func subtractTime(seconds: Int) {
         self.timerLengthInSeconds = max(self.timerLengthInSeconds - seconds, Time.minSeconds)
-        self.time.subtract(seconds: seconds)
+        self.seconds = max(self.seconds - seconds, Time.minSeconds)
     }
     
     func decrement() {
-        self.time.decrement()
+        self.seconds -= 1
     }
     
     func startTimer() {

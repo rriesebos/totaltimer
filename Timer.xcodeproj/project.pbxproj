@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5624C2BA24AA5E4F001249D1 /* Timer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB324A4EDD6005059C0 /* Timer.xcdatamodeld */; };
 		5659D4E424A50FF900CFDF66 /* TimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5659D4E324A50FF900CFDF66 /* TimePicker.swift */; };
 		5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5659D4E524A5378C00CFDF66 /* KeyPad.swift */; };
 		5659D4EE24A63B6000CFDF66 /* TimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5659D4ED24A63B6000CFDF66 /* TimeView.swift */; };
 		5659D4F024A63E3D00CFDF66 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5659D4EF24A63E3D00CFDF66 /* Time.swift */; };
 		565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFAF24A4EDD6005059C0 /* AppDelegate.swift */; };
 		565EAFB224A4EDD6005059C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB124A4EDD6005059C0 /* SceneDelegate.swift */; };
-		565EAFB524A4EDD6005059C0 /* Timer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB324A4EDD6005059C0 /* Timer.xcdatamodeld */; };
 		565EAFB724A4EDD6005059C0 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB624A4EDD6005059C0 /* TimerView.swift */; };
 		565EAFB924A4EDD8005059C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565EAFB824A4EDD8005059C0 /* Assets.xcassets */; };
 		565EAFBC24A4EDD8005059C0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565EAFBB24A4EDD8005059C0 /* Preview Assets.xcassets */; };
@@ -315,11 +315,11 @@
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
 				5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */,
 				5659D4F024A63E3D00CFDF66 /* Time.swift in Sources */,
-				565EAFB524A4EDD6005059C0 /* Timer.xcdatamodeld in Sources */,
 				565EAFB724A4EDD6005059C0 /* TimerView.swift in Sources */,
 				5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */,
 				5659D4EE24A63B6000CFDF66 /* TimeView.swift in Sources */,
 				5660B15524A8DCB6003A38BE /* TimerModel.swift in Sources */,
+				5624C2BA24AA5E4F001249D1 /* Timer.xcdatamodeld in Sources */,
 				565EAFB224A4EDD6005059C0 /* SceneDelegate.swift in Sources */,
 				5659D4E424A50FF900CFDF66 /* TimePicker.swift in Sources */,
 			);

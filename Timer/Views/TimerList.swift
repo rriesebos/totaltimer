@@ -20,6 +20,9 @@ struct TimerList: View {
         ]
     ) var timersData: FetchedResults<TimerData>
     
+    @State private var timerModels: [TimerModel] = []
+    @State private var firstFetch = true
+    
     
     // MARK: Methods
     private func addTimer() {
@@ -28,6 +31,8 @@ struct TimerList: View {
         let timerData = TimerData(context: self.managedObjectContext)
         timerData.label = "Timer label"
         timerData.totalSeconds = 0
+        
+        self.timerModels.append(TimerModel(timerData: timerData))
         
         do {
             try self.managedObjectContext.save()
@@ -39,8 +44,8 @@ struct TimerList: View {
     // MARK: View
     var body: some View {
         NavigationView {
-            List(self.timersData, id: \.self) { timerData in
-                TimerRow(timerModel: TimerModel(timerData: timerData))
+            List(self.timerModels, id: \.id) { timerModel in
+                TimerRow(timerModel: timerModel)
             }
             .navigationBarTitle("Timers")
             .navigationBarItems(
@@ -52,6 +57,15 @@ struct TimerList: View {
             .padding()
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            guard self.firstFetch else { return }
+            
+            self.timerModels = self.timersData.map {
+                    TimerModel(timerData: $0)
+            }
+            
+            self.firstFetch = false
+        }
     }
 }
 
@@ -66,16 +80,16 @@ struct TimerList_Previews: PreviewProvider {
 // MARK: View - TimerRow
 struct TimerRow: View {
     
-    var timerModel: TimerModel
+    @ObservedObject var timerModel: TimerModel
     
     
     var body: some View {
-        NavigationLink(destination: TimerView(timerModel: self.timerModel)) {
+        return NavigationLink(destination: TimerView(timerModel: self.timerModel)) {
             // TODO: play/pause button and time
             HStack(alignment: .center, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(timerModel.label)
-                    Text("\(timerModel.time)")
+                    Text(self.timerModel.label)
+                    Text(Time.secondsToTimeString(seconds: self.timerModel.seconds))
                 }
                 Image(systemName: "play.circle")
                     .font(.system(size: 42))

@@ -30,7 +30,8 @@ struct TimerList: View {
         
         let timerData = TimerData(context: self.managedObjectContext)
         timerData.label = "Timer label"
-        timerData.totalSeconds = 0
+        timerData.totalSeconds = 10
+        timerData.color = UIColor.random
         
         self.timerManagers.append(TimerManager(timerData: timerData))
         
@@ -44,17 +45,31 @@ struct TimerList: View {
     // MARK: View
     var body: some View {
         NavigationView {
-            List(self.timerManagers, id: \.id) { timerManager in
-                TimerRow(timerManager: timerManager)
+            List {
+                ForEach(self.timerManagers, id: \.id) { timerManager in
+                    TimerRow(timerManager: timerManager)
+                }
+                .onDelete { offsets in
+                    for index in offsets {
+                        print(self.timerManagers.count)
+                        print(index)
+                        let timerManager = self.timerManagers[index]
+                        
+                        if let timerData = timerManager.timerData {
+                            self.managedObjectContext.delete(timerData)
+                        }
+                    }
+                    
+                    self.timerManagers.remove(atOffsets: offsets)
+                }
             }
             .navigationBarTitle("Timers")
             .navigationBarItems(
+                leading: EditButton(),
                 trailing: Button(action: self.addTimer) {
-                    Image(systemName: "plus")
+                    Text("Add")
                 }
             )
-            .font(.system(size: 24))
-            .padding()
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
@@ -89,7 +104,7 @@ struct TimerRow: View {
             HStack(alignment: .center, spacing: 24) {
                 ZStack {
                     ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 4, progressLineWidth: 4)
-                            .frame(width: 54, height: 54)
+                            .frame(width: 46, height: 45)
                     
                     Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
                         Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
@@ -107,6 +122,7 @@ struct TimerRow: View {
                     Text(TimeHelper.secondsToTimeString(seconds: self.timerManager.seconds))
                         .foregroundColor(Color.secondary)
                 }
+                .font(.system(size: 20))
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                 self.timerManager.isActive = false
@@ -125,5 +141,15 @@ struct TimerRow: View {
                 self.timerManager.isActive = true
             }
         }
+    }
+}
+
+// TODO: Remove
+extension UIColor {
+    static var random: UIColor {
+        return UIColor(red: .random(in: 0...1),
+                       green: .random(in: 0...1),
+                       blue: .random(in: 0...1),
+                       alpha: 1.0)
     }
 }

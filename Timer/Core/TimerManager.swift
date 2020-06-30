@@ -52,9 +52,7 @@ class TimerManager: ObservableObject, Identifiable {
         
         self.timerLengthInSeconds = Int(timerData.totalSeconds)
         self.seconds = Int(timerData.totalSeconds)
-        
-        // TODO: convert color
-        self.color = UIColor.random
+        self.color = timerData.color as! UIColor
     }
     
     func set(seconds: Int) {
@@ -128,7 +126,7 @@ class TimerManager: ObservableObject, Identifiable {
             self.reset()
         }
         
-        self.timer = Timer.publish(every: 1, tolerance: 0.1, on: .current, in: .common)
+        self.timer = Timer.publish(every: 1, tolerance: 0.1, on: .main, in: .common)
         self.cancellable = self.timer?.autoconnect().sink { _ in
             self.updateTimer()
         }
@@ -175,15 +173,5 @@ class TimerManager: ObservableObject, Identifiable {
         }
             
         self.progress = 1.0 - Double(self.seconds) / Double(self.timerLengthInSeconds)
-    }
-}
-
-// TODO: Remove
-extension UIColor {
-    static var random: UIColor {
-        return UIColor(red: .random(in: 0...1),
-                       green: .random(in: 0...1),
-                       blue: .random(in: 0...1),
-                       alpha: 1.0)
     }
 }

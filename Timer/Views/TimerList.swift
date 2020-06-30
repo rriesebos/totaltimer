@@ -20,7 +20,7 @@ struct TimerList: View {
         ]
     ) var timersData: FetchedResults<TimerData>
     
-    @State private var timerModels: [TimerModel] = []
+    @State private var timerManagers: [TimerManager] = []
     @State private var firstFetch = true
     
     
@@ -32,7 +32,7 @@ struct TimerList: View {
         timerData.label = "Timer label"
         timerData.totalSeconds = 0
         
-        self.timerModels.append(TimerModel(timerData: timerData))
+        self.timerManagers.append(TimerManager(timerData: timerData))
         
         do {
             try self.managedObjectContext.save()
@@ -44,8 +44,8 @@ struct TimerList: View {
     // MARK: View
     var body: some View {
         NavigationView {
-            List(self.timerModels, id: \.id) { timerModel in
-                TimerRow(timerModel: timerModel)
+            List(self.timerManagers, id: \.id) { timerManager in
+                TimerRow(timerManager: timerManager)
             }
             .navigationBarTitle("Timers")
             .navigationBarItems(
@@ -60,8 +60,8 @@ struct TimerList: View {
         .onAppear {
             guard self.firstFetch else { return }
             
-            self.timerModels = self.timersData.map {
-                    TimerModel(timerData: $0)
+            self.timerManagers = self.timersData.map {
+                TimerManager(timerData: $0)
             }
             
             self.firstFetch = false
@@ -80,19 +80,49 @@ struct TimerList_Previews: PreviewProvider {
 // MARK: View - TimerRow
 struct TimerRow: View {
     
-    @ObservedObject var timerModel: TimerModel
+    @ObservedObject var timerManager: TimerManager
+    @State private var exitTime = Date()
     
     
     var body: some View {
-        return NavigationLink(destination: TimerView(timerModel: self.timerModel)) {
-            // TODO: play/pause button and time
+        NavigationLink(destination: TimerView(timerManager: self.timerManager)) {
             HStack(alignment: .center, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(self.timerModel.label)
-                    Text(Time.secondsToTimeString(seconds: self.timerModel.seconds))
+                ZStack {
+                    ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 4, progressLineWidth: 4)
+                            .frame(width: 54, height: 54)
+                    
+                    Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
+                        Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                            .font(.system(size: 42))
+                    }
+                    .disabled(self.timerManager.totalSeconds == 0)
+                    .foregroundColor(self.timerManager.totalSeconds == 0 ? Color.gray : Color(self.timerManager.color))
+                    .buttonStyle(PlainButtonStyle())
                 }
-                Image(systemName: "play.circle")
-                    .font(.system(size: 42))
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(self.timerManager.label)
+                        .lineLimit(1)
+                        .padding(.trailing, 8)
+                    Text(TimeHelper.secondsToTimeString(seconds: self.timerManager.seconds))
+                        .foregroundColor(Color.secondary)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                self.timerManager.isActive = false
+                
+                if self.timerManager.isPlaying {
+                    self.exitTime = Date()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                if self.timerManager.isPlaying {
+                    // Update time using elapsed time when returning from background
+                    let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
+                    self.timerManager.setTime(seconds: lround(Double(self.timerManager.seconds) - elapsedSeconds))
+                }
+                
+                self.timerManager.isActive = true
             }
         }
     }

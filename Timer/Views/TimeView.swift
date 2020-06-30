@@ -20,7 +20,7 @@ struct TimeView: View {
     
     // MARK: Initializers
     init(seconds: Int) {
-        let (hour, minute, second) = Time.secondsToTime(seconds: seconds)
+        let (hour, minute, second) = TimeHelper.secondsToTime(seconds: seconds)
         self.hour = String(hour)
         self.minute = String(minute)
         self.second = String(second)

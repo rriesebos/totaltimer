@@ -43,7 +43,7 @@ struct TimePicker: View {
             self.clear(selectedTextBinding: self.selectedTextBinding(type: self.selectedTimeLabel))
         }
         
-        self.seconds = Time.timeToSeconds(hour: self.hour, minute: self.minute, second: self.second)
+        self.seconds = TimeHelper.timeToSeconds(hour: self.hour, minute: self.minute, second: self.second)
     }
     
     private func fillableNextLabelExists(type: TimeLabelType) -> Bool {

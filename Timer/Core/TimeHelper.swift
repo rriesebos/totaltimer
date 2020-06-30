@@ -1,4 +1,4 @@
-////  Time.swift
+////  TimeHelper.swift
 //  Timer
 //
 //  Created by R Riesebos on 26/06/2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Time {
+class TimeHelper {
     
     // MARK: Properties
     static let minSeconds = 0
@@ -21,11 +21,11 @@ class Time {
         seconds += minute * 60
         seconds += second
         
-        return max(min(seconds, Time.maxSeconds), Time.minSeconds)
+        return max(min(seconds, TimeHelper.maxSeconds), TimeHelper.minSeconds)
     }
     
     static func timeToSeconds(hour: String, minute: String, second: String) -> Int {
-        return Time.timeToSeconds(hour: Int(hour) ?? 0, minute: Int(minute) ?? 0, second: Int(second) ?? 0)
+        return TimeHelper.timeToSeconds(hour: Int(hour) ?? 0, minute: Int(minute) ?? 0, second: Int(second) ?? 0)
     }
     
     static func secondsToTime(seconds: Int) -> (hour: Int, minute: Int, second: Int) {
@@ -37,7 +37,7 @@ class Time {
     }
     
     static func secondsToTimeString(seconds: Int) -> String {
-        let (hour, minute, second) = Time.secondsToTime(seconds: seconds)
+        let (hour, minute, second) = TimeHelper.secondsToTime(seconds: seconds)
         
         return String(format: "%02i:%02i:%02i", hour, minute, second)
     }

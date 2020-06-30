@@ -1,4 +1,4 @@
-////  TimerModel.swift
+////  TimerManager.swift
 //  Timer
 //
 //  Created by R Riesebos on 28/06/2020.
@@ -11,7 +11,7 @@ import CoreData
 import Combine
 import os.log
 
-class TimerModel: ObservableObject, Identifiable {
+class TimerManager: ObservableObject, Identifiable {
     
     let id = UUID()
     var timerData: TimerData? = nil
@@ -30,6 +30,8 @@ class TimerModel: ObservableObject, Identifiable {
     
     private var timer: Timer.TimerPublisher?
     private var cancellable: Cancellable? = nil
+    
+    private var notificationManager = NotificationManager()
     
     
     init(label: String, totalSeconds: Int, color: UIColor) {
@@ -52,7 +54,7 @@ class TimerModel: ObservableObject, Identifiable {
         self.seconds = Int(timerData.totalSeconds)
         
         // TODO: convert color
-        self.color = UIColor.blue
+        self.color = UIColor.random
     }
     
     func set(seconds: Int) {
@@ -88,21 +90,27 @@ class TimerModel: ObservableObject, Identifiable {
     }
     
     func setTime(seconds: Int) {
-        self.seconds = max(min(seconds, Time.maxSeconds), Time.minSeconds)
+        self.seconds = max(min(seconds, TimeHelper.maxSeconds), TimeHelper.minSeconds)
         
         self.updateTimer()
     }
     
     func addTime(seconds: Int) {
-        self.timerLengthInSeconds = min(self.timerLengthInSeconds + seconds, Time.maxSeconds)
-        self.seconds = min(self.seconds + seconds, Time.maxSeconds)
+        self.timerLengthInSeconds = min(self.timerLengthInSeconds + seconds, TimeHelper.maxSeconds)
+        self.seconds = min(self.seconds + seconds, TimeHelper.maxSeconds)
+        
+        self.notificationManager.setNotification(timerManager: self)
         
         self.updateTimer()
     }
     
     func subtractTime(seconds: Int) {
-        self.timerLengthInSeconds = max(self.timerLengthInSeconds - seconds, Time.minSeconds)
-        self.seconds = max(self.seconds - seconds, Time.minSeconds)
+        self.timerLengthInSeconds = max(self.timerLengthInSeconds - seconds, TimeHelper.minSeconds)
+        self.seconds = max(self.seconds - seconds, TimeHelper.minSeconds)
+        
+        if self.seconds > 0 {
+            self.notificationManager.setNotification(timerManager: self)
+        }
         
         self.updateTimer()
     }
@@ -112,20 +120,32 @@ class TimerModel: ObservableObject, Identifiable {
     }
     
     func startTimer() {
+        guard self.totalSeconds > 0 else {
+            return
+        }
+        
         if self.seconds == 0 {
             self.reset()
         }
         
-        self.timer = Timer.publish(every: 1, tolerance: 0.1, on: .main, in: .common)
+        self.timer = Timer.publish(every: 1, tolerance: 0.1, on: .current, in: .common)
         self.cancellable = self.timer?.autoconnect().sink { _ in
             self.updateTimer()
         }
+        
+        self.notificationManager.setNotification(timerManager: self)
         
         self.isPlaying = true
     }
     
     func stopTimer() {
+        guard self.totalSeconds > 0 else {
+            return
+        }
+        
         self.cancellable?.cancel()
+        
+        self.notificationManager.removeNotification()
         
         self.isPlaying = false
     }
@@ -135,7 +155,12 @@ class TimerModel: ObservableObject, Identifiable {
             return
         }
         
-        if self.seconds == 0 {
+        guard self.totalSeconds > 0 else {
+            self.progress = 0
+            return
+        }
+        
+        if self.seconds <= 0 {
             // TODO: trigger alarm
             self.stopTimer()
         }
@@ -150,5 +175,15 @@ class TimerModel: ObservableObject, Identifiable {
         }
             
         self.progress = 1.0 - Double(self.seconds) / Double(self.timerLengthInSeconds)
+    }
+}
+
+// TODO: Remove
+extension UIColor {
+    static var random: UIColor {
+        return UIColor(red: .random(in: 0...1),
+                       green: .random(in: 0...1),
+                       blue: .random(in: 0...1),
+                       alpha: 1.0)
     }
 }

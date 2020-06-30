@@ -18,12 +18,8 @@ struct TimerView: View {
     
     @ObservedObject var timerModel: TimerModel
     
-    @State private var progress = CGFloat.zero
-    @State private var isPlaying = false
-    
     @State private var showTimePicker = false
     
-    @State private var isActive = true
     @State private var exitTime = Date()
     
     @State private var notificationID = UUID().uuidString
@@ -37,17 +33,12 @@ struct TimerView: View {
     // MARK: Methods
     private func setTimer(seconds: Int) {
         self.timerModel.set(seconds: seconds)
-
-        self.progress = 0
-        
-        self.startTimer()
+        self.timerModel.save(managedObjectContext: self.managedObjectContext)
     }
     
     private func addTime(seconds: Int) {
         self.timerModel.addTime(seconds: seconds)
-        
         self.setNotification()
-        self.updateTimer()
     }
     
     private func subtractTime(seconds: Int) {
@@ -56,58 +47,20 @@ struct TimerView: View {
         if self.timerModel.seconds > 0 {
             self.setNotification()
         }
-        
-        self.updateTimer()
     }
     
     private func startTimer() {
-        if self.timerModel.seconds == 0 {
-            self.resetTimer()
-        }
-        
         self.timerModel.startTimer()
-        
-        self.isPlaying = true
-        
         self.setNotification()
     }
     
     private func stopTimer() {
         self.timerModel.stopTimer()
-        
-        self.isPlaying = false
-        
         self.removeNotification()
     }
     
     private func resetTimer() {
-        self.stopTimer()
-        
         self.timerModel.reset()
-
-        self.progress = 0
-    }
-    
-    private func updateTimer() {
-        guard self.isActive else {
-            return
-        }
-        
-        if self.timerModel.seconds == 0 {
-            // TODO: trigger alarm
-            self.stopTimer()
-        }
-        
-        if self.isPlaying {
-            self.timerModel.decrement()
-        }
-        
-        guard self.timerModel.timerLengthInSeconds > 0 else {
-            self.progress = 1.0
-            return
-        }
-            
-        self.progress = 1.0 - CGFloat(self.timerModel.seconds) / CGFloat(self.timerModel.timerLengthInSeconds)
     }
     
     private func removeNotification() {
@@ -143,7 +96,7 @@ struct TimerView: View {
             Text(self.timerModel.label)
                 .font(.largeTitle)
             ZStack {
-                ProgressCircle(color: Color(self.timerModel.color), progress: self.progress)
+                ProgressCircle(color: Color(self.timerModel.color), progress: self.timerModel.progress)
                 
                 VStack(alignment: .center, spacing: 16) {
                     TimeView(seconds: self.timerModel.seconds)
@@ -157,7 +110,7 @@ struct TimerView: View {
                         Button(action: { self.subtractTime(seconds: 30) }) {
                             Text("- 30")
                         }
-                        .opacity(self.isPlaying ? 1 : 0)
+                        .opacity(self.timerModel.isPlaying ? 1 : 0)
                         .animation(.linear(duration: 0.1))
                         Button(action: self.resetTimer) {
                             Image(systemName: "arrow.counterclockwise.circle.fill")
@@ -166,7 +119,7 @@ struct TimerView: View {
                         Button(action: { self.addTime(seconds: 30) }) {
                             Text("+ 30")
                         }
-                        .opacity(self.isPlaying ? 1 : 0)
+                        .opacity(self.timerModel.isPlaying ? 1 : 0)
                         .animation(.linear(duration: 0.1))
                     }
                     .font(.system(size: 28))
@@ -175,8 +128,8 @@ struct TimerView: View {
                 .scaledToFit()
             }
             .padding(.horizontal, 24)
-            Button(action: { self.isPlaying ? self.stopTimer() : self.startTimer() }) {
-                Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+            Button(action: { self.timerModel.isPlaying ? self.stopTimer() : self.startTimer() }) {
+                Image(systemName: self.timerModel.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                   .font(.system(size: 64))
             }
             .disabled(self.timerModel.totalSeconds == 0)
@@ -186,40 +139,30 @@ struct TimerView: View {
         .sheet(isPresented: self.$showTimePicker) {
             TimePicker() { seconds in
                 self.setTimer(seconds: seconds)
-                self.isPlaying = true
+                self.startTimer()
             }
         }
         .navigationBarItems(
             trailing: Button(action: {}) {
                 Image(systemName: "square.and.pencil")
+                    .font(.system(size: 24))
             }
         )
-        .font(.system(size: 24))
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-            self.isActive = false
+            self.timerModel.isActive = false
             
-            if self.isPlaying {
+            if self.timerModel.isPlaying {
                 self.exitTime = Date()
             }
-            
-            self.timerModel.save(managedObjectContext: self.managedObjectContext)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            self.isActive = true
-            
-            if self.isPlaying {
+            if self.timerModel.isPlaying {
                 // Update time using elapsed time when returning from background
                 let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
-                self.timerModel.setTime(seconds: Double(self.timerModel.seconds) - elapsedSeconds)
-                
-                self.updateTimer()
+                self.timerModel.setTime(seconds: lround(Double(self.timerModel.seconds) - elapsedSeconds))
             }
-        }
-        .onReceive(self.timerModel.timer) { _ in
-            self.updateTimer()
-        }
-        .onDisappear {
-            self.timerModel.save(managedObjectContext: self.managedObjectContext)
+            
+            self.timerModel.isActive = true
         }
     }
 }
@@ -236,7 +179,7 @@ struct TimerView_Previews: PreviewProvider {
 struct ProgressCircle: View {
     
     var color: Color
-    var progress: CGFloat
+    var progress: Double
     
     var body: some View {
         ZStack {
@@ -247,7 +190,7 @@ struct ProgressCircle: View {
                 .opacity(0.3)
             
             Circle()
-                .trim(from: 0.0, to: min(self.progress, 1.0))
+                .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
                 .stroke(style: StrokeStyle(lineWidth: 20.0, lineCap: .round, lineJoin: .round))
                 .foregroundColor(self.color)
                 .rotationEffect(.degrees(270))

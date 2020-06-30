@@ -19,7 +19,6 @@ struct ProgressCircle: View {
         ZStack {
             Circle()
                 .stroke(lineWidth: self.defaultLineWidth)
-                // TODO: setting
                 .foregroundColor(self.color)
                 .opacity(0.3)
             

@@ -51,13 +51,17 @@ struct TimerList: View {
                 }
                 .onDelete { offsets in
                     for index in offsets {
-                        print(self.timerManagers.count)
-                        print(index)
                         let timerManager = self.timerManagers[index]
                         
                         if let timerData = timerManager.timerData {
                             self.managedObjectContext.delete(timerData)
                         }
+                    }
+
+                    do {
+                        try self.managedObjectContext.save()
+                    } catch {
+                        os_log("%@", type: .error, error.localizedDescription)
                     }
                     
                     self.timerManagers.remove(atOffsets: offsets)
@@ -87,6 +91,11 @@ struct TimerList: View {
 struct TimerList_Previews: PreviewProvider {
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        let timerData = TimerData(context: context)
+        timerData.label = "Timer label"
+        timerData.totalSeconds = 10
+        timerData.color = UIColor.random
         
         return TimerList().environment(\.managedObjectContext, context)
     }

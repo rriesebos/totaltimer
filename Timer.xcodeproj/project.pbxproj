@@ -17,7 +17,7 @@
 		5659D4F024A63E3D00CFDF66 /* TimeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5659D4EF24A63E3D00CFDF66 /* TimeHelper.swift */; };
 		565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFAF24A4EDD6005059C0 /* AppDelegate.swift */; };
 		565EAFB224A4EDD6005059C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB124A4EDD6005059C0 /* SceneDelegate.swift */; };
-		565EAFB724A4EDD6005059C0 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB624A4EDD6005059C0 /* TimerView.swift */; };
+		565EAFB724A4EDD6005059C0 /* TimerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFB624A4EDD6005059C0 /* TimerDetailView.swift */; };
 		565EAFB924A4EDD8005059C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565EAFB824A4EDD8005059C0 /* Assets.xcassets */; };
 		565EAFBC24A4EDD8005059C0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565EAFBB24A4EDD8005059C0 /* Preview Assets.xcassets */; };
 		565EAFBF24A4EDD8005059C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 565EAFBD24A4EDD8005059C0 /* LaunchScreen.storyboard */; };
@@ -26,6 +26,8 @@
 		5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5660B15624A8DFFE003A38BE /* TimerList.swift */; };
 		56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56AFC30C24ACC43E003DE8BD /* Colors.xcassets */; };
 		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
+		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
+		56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31224ACD439003DE8BD /* ColorPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +58,7 @@
 		565EAFAF24A4EDD6005059C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		565EAFB124A4EDD6005059C0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		565EAFB424A4EDD6005059C0 /* Timer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Timer.xcdatamodel; sourceTree = "<group>"; };
-		565EAFB624A4EDD6005059C0 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		565EAFB624A4EDD6005059C0 /* TimerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDetailView.swift; sourceTree = "<group>"; };
 		565EAFB824A4EDD8005059C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		565EAFBB24A4EDD8005059C0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		565EAFBE24A4EDD8005059C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -71,6 +73,8 @@
 		5660B15624A8DFFE003A38BE /* TimerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerList.swift; sourceTree = "<group>"; };
 		56AFC30C24ACC43E003DE8BD /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		56AFC30E24ACC687003DE8BD /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEditView.swift; sourceTree = "<group>"; };
+		56AFC31224ACD439003DE8BD /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,12 +178,14 @@
 			isa = PBXGroup;
 			children = (
 				5660B15624A8DFFE003A38BE /* TimerList.swift */,
-				565EAFB624A4EDD6005059C0 /* TimerView.swift */,
-				5659D4E324A50FF900CFDF66 /* TimePicker.swift */,
+				565EAFB624A4EDD6005059C0 /* TimerDetailView.swift */,
+				56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */,
 				5659D4ED24A63B6000CFDF66 /* TimeView.swift */,
+				5659D4E324A50FF900CFDF66 /* TimePicker.swift */,
 				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
 				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
 				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
+				56AFC31224ACD439003DE8BD /* ColorPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -335,12 +341,14 @@
 			files = (
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
 				5624C2BC24AB6D93001249D1 /* TimerManager.swift in Sources */,
+				56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */,
+				56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */,
 				5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */,
 				5659D4F024A63E3D00CFDF66 /* TimeHelper.swift in Sources */,
 				5624C2BE24AB6E66001249D1 /* NotificationManager.swift in Sources */,
 				56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */,
 				5624C2C024AB7B63001249D1 /* ProgressCircle.swift in Sources */,
-				565EAFB724A4EDD6005059C0 /* TimerView.swift in Sources */,
+				565EAFB724A4EDD6005059C0 /* TimerDetailView.swift in Sources */,
 				5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */,
 				5659D4EE24A63B6000CFDF66 /* TimeView.swift in Sources */,
 				5624C2BA24AA5E4F001249D1 /* Timer.xcdatamodeld in Sources */,

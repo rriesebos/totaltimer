@@ -10,6 +10,8 @@ import SwiftUI
 struct TimePicker: View {
     
     // MARK: Properties
+    @Environment(\.presentationMode) var presentationMode
+    
     let completion: (Int) -> Void
     
     @State private var seconds = 0
@@ -19,8 +21,6 @@ struct TimePicker: View {
     @State private var second = ""
     
     @State private var selectedTimeLabel = TimeLabelType.second
-    
-    @Environment(\.presentationMode) var presentationMode
     
     
     // MARK: Initializer

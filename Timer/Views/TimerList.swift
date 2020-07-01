@@ -147,7 +147,7 @@ struct TimerRow: View {
     
     
     var body: some View {
-        NavigationLink(destination: TimerView(timerManager: self.timerManager)) {
+        NavigationLink(destination: TimerDetailView(timerManager: self.timerManager)) {
             HStack(alignment: .center, spacing: 24) {
                 ZStack {
                     ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 4, progressLineWidth: 4)

@@ -19,31 +19,19 @@ struct TimeView: View {
     
     
     // MARK: Initializers
-    init(time: Time) {
-        self.hour = String(time.hour)
-        self.minute = String(time.minute)
-        self.second = String(time.second)
+    init(seconds: Int) {
+        let (hour, minute, second) = TimeHelper.secondsToTime(seconds: seconds)
+        self.hour = String(hour)
+        self.minute = String(minute)
+        self.second = String(second)
         
         self._selectedTimeLabel = .constant(TimeLabelType.second)
-    }
-    
-    init(hour: String, minute: String, second: String) {
-        self.hour = hour
-        self.minute = minute
-        self.second = second
-        
-        self._selectedTimeLabel = .constant(TimeLabelType.second)
-    }
-    
-    init(time: Time, selectedTimeLabel: Binding<TimeLabelType>) {
-        self.init(time: time)
-
-        self.selectable = true
-        self._selectedTimeLabel = selectedTimeLabel
     }
 
     init(hour: String, minute: String, second: String, selectedTimeLabel: Binding<TimeLabelType>) {
-        self.init(hour: hour, minute: minute, second: second)
+        self.hour = hour
+        self.minute = minute
+        self.second = second
         
         self.selectable = true
         self._selectedTimeLabel = selectedTimeLabel
@@ -71,7 +59,7 @@ struct TimeView: View {
 
 struct TimeView_Previews: PreviewProvider {
     static var previews: some View {
-        TimeView(time: Time(), selectedTimeLabel: .constant(TimeLabelType.second))
+        TimeView(hour: "", minute: "", second: "", selectedTimeLabel: .constant(TimeLabelType.second))
     }
 }
 
@@ -90,17 +78,6 @@ enum TimeLabelType: String {
     case hour = "Hour"
     case minute = "Minute"
     case second = "Second"
-    
-    var multiplier: Int {
-        switch self {
-        case .hour:
-            return 3600
-        case .minute:
-            return 60
-        case .second:
-            return 1
-        }
-    }
     
     var next: TimeLabelType {
         switch self {

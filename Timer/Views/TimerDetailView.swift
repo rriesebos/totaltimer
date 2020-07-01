@@ -17,6 +17,7 @@ struct TimerDetailView: View {
     @ObservedObject var timerManager: TimerManager
     
     @State private var showTimePicker = false
+    @State private var showColorPicker = false
     
     @State private var exitTime = Date()
     
@@ -44,20 +45,35 @@ struct TimerDetailView: View {
                 
                 self.timerManager.save(managedObjectContext: self.managedObjectContext)
             })
-                .font(.largeTitle)
+                .font(.system(size: 34, weight: .medium, design: .default))
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
+            
             ZStack {
                 ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 12, progressLineWidth: 20)
+                    .onTapGesture {
+                        self.showColorPicker = true
+                    }
+                    .sheet(isPresented: self.$showColorPicker) {
+                        ColorPicker() { uiColor in
+                            self.timerManager.color = uiColor
+                        }
+                    }
                 
                 VStack(alignment: .center, spacing: 16) {
                     TimeView(seconds: self.timerManager.seconds)
-                        .onTapGesture {
-                            self.showTimePicker = true
-                            self.timerManager.reset()
-                        }
                         .padding()
                         .scaledToFit()
+                        .onTapGesture {
+                            self.showTimePicker = true
+                        }
+                        .sheet(isPresented: self.$showTimePicker) {
+                            TimePicker() { seconds in
+                                self.setTimer(seconds: seconds)
+                                self.timerManager.startTimer()
+                            }
+                        }
+
                     HStack(spacing: 24) {
                         Button(action: { self.timerManager.subtractTime(seconds: 30) }) {
                             Text("- 30")
@@ -75,27 +91,24 @@ struct TimerDetailView: View {
                         .animation(.linear(duration: 0.1))
                     }
                     .font(.system(size: 28))
+                    .accentColor(Color(self.timerManager.color))
                 }
                 .padding(.horizontal)
                 .scaledToFit()
             }
             .padding(.horizontal, 24)
+            
             Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
                 Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 64))
             }
             .disabled(self.timerManager.totalSeconds == 0)
+            .accentColor(Color(self.timerManager.color))
             
             Spacer()
         }
-        .sheet(isPresented: self.$showTimePicker) {
-            TimePicker() { seconds in
-                self.setTimer(seconds: seconds)
-                self.timerManager.startTimer()
-            }
-        }
         .navigationBarItems(
-            trailing: Button(action: {}) {
+            trailing: NavigationLink(destination: TimerEditView(timerManager: self.timerManager)) {
                 Image(systemName: "square.and.pencil")
                     .font(.system(size: 24))
             }

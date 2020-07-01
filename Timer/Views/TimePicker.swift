@@ -10,9 +10,11 @@ import SwiftUI
 struct TimePicker: View {
     
     // MARK: Properties
-    let completion: (Time) -> Void
+    @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject private var time: Time
+    let completion: (Int) -> Void
+    
+    @State private var seconds = 0
     
     @State private var hour = ""
     @State private var minute = ""
@@ -20,31 +22,9 @@ struct TimePicker: View {
     
     @State private var selectedTimeLabel = TimeLabelType.second
     
-    @Environment(\.presentationMode) var presentationMode
-    
     
     // MARK: Initializer
-    init(initialTime: Time, completion: @escaping (Time) -> Void) {
-        if initialTime.hour > 0 {
-            self._hour = State(initialValue: String(initialTime.hour))
-        }
-        
-        if initialTime.minute > 0 {
-            self._minute = State(initialValue: String(initialTime.minute))
-        }
-            
-        if initialTime.second > 0 {
-            self._second = State(initialValue: String(initialTime.second))
-        }
-        
-        self.time = Time(time: initialTime)
-        
-        self.completion = completion
-    }
-    
-    init(completion: @escaping (Time) -> Void) {
-        self.time = Time()
-        
+    init(completion: @escaping (Int) -> Void) {
         self.completion = completion
     }
     
@@ -63,7 +43,7 @@ struct TimePicker: View {
             self.clear(selectedTextBinding: self.selectedTextBinding(type: self.selectedTimeLabel))
         }
         
-        self.time.set(hour: self.hour, minute: self.minute, second: self.second)
+        self.seconds = TimeHelper.timeToSeconds(hour: self.hour, minute: self.minute, second: self.second)
     }
     
     private func fillableNextLabelExists(type: TimeLabelType) -> Bool {
@@ -108,8 +88,8 @@ struct TimePicker: View {
         self.selectedTimeLabel = TimeLabelType.second
     }
     
-    private func startTimer() {
-        self.completion(time)
+    private func pickTime() {
+        self.completion(self.seconds)
         self.presentationMode.wrappedValue.dismiss()
     }
     
@@ -120,12 +100,12 @@ struct TimePicker: View {
             TimeView(hour: self.hour, minute: self.minute, second: self.second, selectedTimeLabel: self.$selectedTimeLabel)
             KeyPad(action: self.keyPressed)
                 .padding(4)
-            Button(action: { self.startTimer() }) {
+            Button(action: { self.pickTime() }) {
                 Image(systemName: "play.circle.fill")
                     .font(.system(size: 64))
             }
             .padding(.top, 32)
-            .disabled(self.time.seconds <= 0)
+            .disabled(self.seconds <= 0)
             Spacer()
         }
         .padding(.horizontal, 72)
@@ -134,6 +114,6 @@ struct TimePicker: View {
 
 struct TimePicker_Previews: PreviewProvider {
     static var previews: some View {
-        TimePicker(initialTime: Time()) { _ in }
+        TimePicker() { _ in }
     }
 }

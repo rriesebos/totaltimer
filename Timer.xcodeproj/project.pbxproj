@@ -24,6 +24,8 @@
 		565EAFCA24A4EDD9005059C0 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFC924A4EDD9005059C0 /* TimerTests.swift */; };
 		565EAFD524A4EDD9005059C0 /* TimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFD424A4EDD9005059C0 /* TimerUITests.swift */; };
 		5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5660B15624A8DFFE003A38BE /* TimerList.swift */; };
+		56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56AFC30C24ACC43E003DE8BD /* Colors.xcassets */; };
+		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		565EAFD624A4EDD9005059C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5660B15424A8DCB6003A38BE /* TimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
 		5660B15624A8DFFE003A38BE /* TimerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerList.swift; sourceTree = "<group>"; };
+		56AFC30C24ACC43E003DE8BD /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		56AFC30E24ACC687003DE8BD /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +179,7 @@
 				5659D4ED24A63B6000CFDF66 /* TimeView.swift */,
 				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
 				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
+				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				565EAFB824A4EDD8005059C0 /* Assets.xcassets */,
+				56AFC30C24ACC43E003DE8BD /* Colors.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -300,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				565EAFBF24A4EDD8005059C0 /* LaunchScreen.storyboard in Resources */,
+				56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */,
 				565EAFBC24A4EDD8005059C0 /* Preview Assets.xcassets in Resources */,
 				565EAFB924A4EDD8005059C0 /* Assets.xcassets in Resources */,
 			);
@@ -331,6 +338,7 @@
 				5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */,
 				5659D4F024A63E3D00CFDF66 /* TimeHelper.swift in Sources */,
 				5624C2BE24AB6E66001249D1 /* NotificationManager.swift in Sources */,
+				56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */,
 				5624C2C024AB7B63001249D1 /* ProgressCircle.swift in Sources */,
 				565EAFB724A4EDD6005059C0 /* TimerView.swift in Sources */,
 				5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */,

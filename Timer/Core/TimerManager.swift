@@ -66,7 +66,9 @@ class TimerManager: ObservableObject, Identifiable {
     
     func save(managedObjectContext: NSManagedObjectContext) {
         managedObjectContext.perform {
+            self.timerData?.label = self.label
             self.timerData?.totalSeconds = Int64(self.totalSeconds)
+            self.timerData?.color = self.color
 
             do {
                 try managedObjectContext.save()

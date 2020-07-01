@@ -13,6 +13,9 @@ struct TimerList: View {
     // MARK: Properties
     @Environment(\.managedObjectContext) var managedObjectContext
     
+    // Added to prevent navigation bar not working after sheet is dismissed
+    @Environment(\.presentationMode) var presentationMode
+    
     @FetchRequest(
         entity: TimerData.entity(),
         sortDescriptors: [
@@ -23,23 +26,44 @@ struct TimerList: View {
     @State private var timerManagers: [TimerManager] = []
     @State private var firstFetch = true
     
+    @State private var showTimePicker = false
+    @State private var timerCount = UserDefaults.standard.integer(forKey: "TimerCount")
+    
     
     // MARK: Methods
-    private func addTimer() {
-        // TODO: implement
-        
+    private func addTimer(seconds: Int) {
         let timerData = TimerData(context: self.managedObjectContext)
-        timerData.label = "Timer label"
-        timerData.totalSeconds = 10
-        timerData.color = UIColor.random
+        timerData.label = "Timer \(self.timerCount + 1)"
+        timerData.totalSeconds = Int64(seconds)
+        timerData.color = UIColor.timerColors[self.timerCount % UIColor.timerColors.count]
         
-        self.timerManagers.append(TimerManager(timerData: timerData))
+        let timerManager = TimerManager(timerData: timerData)
+        self.timerManagers.append(timerManager)
+        
+        timerManager.startTimer()
         
         do {
             try self.managedObjectContext.save()
         } catch {
             os_log("%@", type: .error, error.localizedDescription)
         }
+
+        self.timerCount += 1
+        self.updateTimerCounter()
+    }
+    
+    private func updateTimerCounter(offsets: IndexSet = IndexSet()) {
+        // Decrement timerCount if last timer is deleted
+        if offsets.contains(self.timerManagers.count) {
+            self.timerCount -= 1
+        }
+        
+        // Reset timerCount if all timers are deleted
+        if self.timerManagers.isEmpty {
+            self.timerCount = 0
+        }
+        
+        UserDefaults.standard.set(self.timerCount, forKey: "TimerCount")
     }
     
     // MARK: View
@@ -57,23 +81,30 @@ struct TimerList: View {
                             self.managedObjectContext.delete(timerData)
                         }
                     }
+                    
+                    self.timerManagers.remove(atOffsets: offsets)
+                    
+                    self.updateTimerCounter(offsets: offsets)
 
                     do {
                         try self.managedObjectContext.save()
                     } catch {
                         os_log("%@", type: .error, error.localizedDescription)
                     }
-                    
-                    self.timerManagers.remove(atOffsets: offsets)
                 }
             }
             .navigationBarTitle("Timers")
             .navigationBarItems(
                 leading: EditButton(),
-                trailing: Button(action: self.addTimer) {
+                trailing: Button(action: { self.showTimePicker = true }) {
                     Text("Add")
                 }
             )
+        }
+        .sheet(isPresented: self.$showTimePicker) {
+            TimePicker() { seconds in
+                self.addTimer(seconds: seconds)
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
@@ -82,6 +113,13 @@ struct TimerList: View {
             self.timerManagers = self.timersData.map {
                 TimerManager(timerData: $0)
             }
+            
+            // Sort timerManagers by label length (alphabetically if equal)
+            self.timerManagers.sort {
+                return $0.label.count < $1.label.count
+            }
+            
+            self.updateTimerCounter()
             
             self.firstFetch = false
         }
@@ -115,8 +153,10 @@ struct TimerRow: View {
                     ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 4, progressLineWidth: 4)
                             .frame(width: 46, height: 45)
                     
-                    Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
-                        Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                    Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() :
+                        self.timerManager.seconds == 0 ? self.timerManager.reset() : self.timerManager.startTimer() }) {
+                        Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" :
+                            self.timerManager.seconds == 0 ? "arrow.counterclockwise.circle.fill" : "play.circle.fill")
                             .font(.system(size: 42))
                     }
                     .disabled(self.timerManager.totalSeconds == 0)
@@ -150,15 +190,5 @@ struct TimerRow: View {
                 self.timerManager.isActive = true
             }
         }
-    }
-}
-
-// TODO: Remove
-extension UIColor {
-    static var random: UIColor {
-        return UIColor(red: .random(in: 0...1),
-                       green: .random(in: 0...1),
-                       blue: .random(in: 0...1),
-                       alpha: 1.0)
     }
 }

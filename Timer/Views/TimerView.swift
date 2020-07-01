@@ -37,8 +37,16 @@ struct TimerView: View {
     // MARK: View
     var body: some View {
         VStack(spacing: 64) {
-            Text(self.timerManager.label)
+            TextField(self.timerManager.label, text: self.$timerManager.label, onEditingChanged: { isEditing in
+                if isEditing {
+                    return
+                }
+                
+                self.timerManager.save(managedObjectContext: self.managedObjectContext)
+            })
                 .font(.largeTitle)
+                .lineLimit(1)
+                .multilineTextAlignment(.center)
             ZStack {
                 ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 12, progressLineWidth: 20)
                 
@@ -74,7 +82,7 @@ struct TimerView: View {
             .padding(.horizontal, 24)
             Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
                 Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                  .font(.system(size: 64))
+                    .font(.system(size: 64))
             }
             .disabled(self.timerManager.totalSeconds == 0)
             

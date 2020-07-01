@@ -19,7 +19,9 @@ struct TimerList: View {
     @FetchRequest(
         entity: TimerData.entity(),
         sortDescriptors: [
-            NSSortDescriptor(keyPath: \TimerData.label, ascending: true)
+            NSSortDescriptor(keyPath: \TimerData.dateAdded, ascending: true),
+            NSSortDescriptor(keyPath: \TimerData.label, ascending: true),
+            NSSortDescriptor(keyPath: \TimerData.totalSeconds, ascending: true)
         ]
     ) var timersData: FetchedResults<TimerData>
     
@@ -36,6 +38,7 @@ struct TimerList: View {
         timerData.label = "Timer \(self.timerCount + 1)"
         timerData.totalSeconds = Int64(seconds)
         timerData.color = UIColor.timerColors[self.timerCount % UIColor.timerColors.count]
+        timerData.dateAdded = Date()
         
         let timerManager = TimerManager(timerData: timerData)
         self.timerManagers.append(timerManager)
@@ -112,11 +115,6 @@ struct TimerList: View {
             
             self.timerManagers = self.timersData.map {
                 TimerManager(timerData: $0)
-            }
-            
-            // Sort timerManagers by label length (alphabetically if equal)
-            self.timerManagers.sort {
-                return $0.label.count < $1.label.count
             }
             
             self.updateTimerCounter()

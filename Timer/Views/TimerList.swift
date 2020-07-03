@@ -106,94 +106,92 @@ struct TimerList: View {
     var body: some View {
         let timerManagers = self.timerManagers.filter { !self.showActive || $0.isPlaying }
         
-        return GeometryReader { geometry in
-            NavigationView {
-                List(selection: self.$selection) {
-                    ForEach(timerManagers, id: \.self) { timerManager in
-                        TimerRow(timerManager: timerManager)
-                    }
-                    .onDelete { offsets in
-                        self.deleteTimers(timerManagers: timerManagers, offsets: offsets)
-                    }
+        return NavigationView {
+            List(selection: self.$selection) {
+                ForEach(timerManagers, id: \.self) { timerManager in
+                    TimerRow(timerManager: timerManager)
                 }
-                .environment(\.editMode, self.isSelecting ? .constant(.active) : .constant(.inactive))
-                .navigationBarTitle("Timers")
-                .navigationBarItems(
-                    leading: Button(action: {
-                        withAnimation {
-                            self.isSelecting.toggle()
+                .onDelete { offsets in
+                    self.deleteTimers(timerManagers: timerManagers, offsets: offsets)
+                }
+            }
+            .environment(\.editMode, self.isSelecting ? .constant(.active) : .constant(.inactive))
+            .navigationBarTitle("Timers")
+            .navigationBarItems(
+                leading: Button(action: {
+                    withAnimation {
+                        self.isSelecting.toggle()
+                    }
+                }) {
+                    Text(self.isSelecting ? "Cancel" : "Select")
+                }
+                .frame(width: 64, alignment: .leading),
+                trailing: HStack(spacing: 0) {
+                    Picker(selection: self.$showActive, label: Text("Toggle between all and active")) {
+                        Text("All").tag(false)
+                        Text("Active").tag(true)
+                    }
+                    .frame(width: 115)
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                    // Spacer to center picker, the width is
+                    // half the screen width - half the picker width -
+                    // add button width (64) - right side padding (16)
+                    Spacer()
+                        .frame(width: (UIScreen.main.bounds.width - 115) / 2 - 80)
+                    
+                    Button(action: {
+                        if self.isSelecting {
+                            withAnimation {
+                                self.isSelecting = false
+                            }
+                            
+                            if self.showActive {
+                                // Stop selected timers
+                                for timerManager in self.selection {
+                                    timerManager.stopTimer()
+                                }
+                            } else {
+                                // Play selected timers
+                                for timerManager in self.selection {
+                                    timerManager.startTimer()
+                                }
+                            }
+                            
+                            self.selection.removeAll()
+                        } else {
+                            self.showTimePicker = true
                         }
                     }) {
-                        Text(self.isSelecting ? "Cancel" : "Select")
-                    }
-                    .frame(width: 64, alignment: .leading),
-                    trailing: HStack(spacing: 0) {
-                        Picker(selection: self.$showActive, label: Text("Toggle between all and active")) {
-                            Text("All").tag(false)
-                            Text("Active").tag(true)
-                        }
-                        .frame(width: 115)
-                        .pickerStyle(SegmentedPickerStyle())
-                        
-                        // Spacer to center picker, the width is
-                        // half the screen width - half the picker width -
-                        // add button width (64) - right side padding (16)
-                        Spacer()
-                            .frame(width: (geometry.size.width - 115) / 2 - 80)
-                        
-                        Button(action: {
-                            if self.isSelecting {
-                                withAnimation {
-                                    self.isSelecting = false
-                                }
-                                
-                                if self.showActive {
-                                    // Stop selected timers
-                                    for timerManager in self.selection {
-                                        timerManager.stopTimer()
-                                    }
-                                } else {
-                                    // Play selected timers
-                                    for timerManager in self.selection {
-                                        timerManager.startTimer()
-                                    }
-                                }
-                                
-                                self.selection.removeAll()
+                        if self.isSelecting {
+                            if self.showActive {
+                                Text("Pause")
                             } else {
-                                self.showTimePicker = true
+                                Text("Play")
                             }
-                        }) {
-                            if self.isSelecting {
-                                if self.showActive {
-                                    Text("Pause")
-                                } else {
-                                    Text("Play")
-                                }
-                            } else {
-                                Text("Add")
-                            }
+                        } else {
+                            Text("Add")
                         }
-                        .frame(width: 64, alignment: .trailing)
-                        .disabled(self.selection.isEmpty && self.isSelecting)
                     }
-                )
-            }
-            .sheet(isPresented: self.$showTimePicker) {
-                TimePicker() { seconds in
-                    self.addTimer(seconds: seconds)
+                    .frame(width: 64, alignment: .trailing)
+                    .disabled(self.selection.isEmpty && self.isSelecting)
                 }
+            )
+        }
+        .sheet(isPresented: self.$showTimePicker) {
+            TimePicker() { seconds in
+                self.addTimer(seconds: seconds)
             }
-            .navigationViewStyle(StackNavigationViewStyle())
-            .onAppear {
-                guard self.firstFetch else { return }
-                
-                self.timerManagers = self.timersData.map {
-                    TimerManager(timerData: $0)
-                }
-                
-                self.firstFetch = false
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            guard self.firstFetch else { return }
+            
+            self.timerManagers = self.timersData.map {
+                TimerManager(timerData: $0)
             }
+            
+            self.firstFetch = false
         }
     }
 }

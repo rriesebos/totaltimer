@@ -11,7 +11,7 @@ import CoreData
 import Combine
 import os.log
 
-class TimerManager: ObservableObject, Identifiable {
+class TimerManager: ObservableObject, Identifiable, Hashable {
     
     let id = UUID()
     var timerData: TimerData? = nil
@@ -175,5 +175,13 @@ class TimerManager: ObservableObject, Identifiable {
         }
             
         self.progress = 1.0 - Double(self.seconds) / Double(self.timerLengthInSeconds)
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+    }
+    
+    static func == (lhs: TimerManager, rhs: TimerManager) -> Bool {
+        return lhs.id == rhs.id
     }
 }

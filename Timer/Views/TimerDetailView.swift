@@ -51,6 +51,8 @@ struct TimerDetailView: View {
             
             ZStack {
                 ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 12, progressLineWidth: 20)
+                    .scaledToFill()
+                    .padding(.vertical, 16)
                     .onTapGesture {
                         self.showColorPicker = true
                     }
@@ -102,6 +104,7 @@ struct TimerDetailView: View {
                 Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 64))
             }
+            .padding(.bottom, 16)
             .disabled(self.timerManager.totalSeconds == 0)
             .accentColor(Color(self.timerManager.color))
             

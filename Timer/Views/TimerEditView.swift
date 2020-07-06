@@ -36,6 +36,7 @@ struct TimerEditView: View {
     private func save() {
         self.timerManager.label = self.label
         self.timerManager.totalSeconds = self.totalSeconds
+        self.timerManager.timerLengthInSeconds = self.totalSeconds
         self.timerManager.seconds = self.totalSeconds
         self.timerManager.color = self.color
         

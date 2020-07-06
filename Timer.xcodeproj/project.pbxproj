@@ -28,6 +28,7 @@
 		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
 		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
 		56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31224ACD439003DE8BD /* ColorPicker.swift */; };
+		56B5670724B3632300B5E424 /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5670624B3632200B5E424 /* alarm.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +55,7 @@
 		5659D4E524A5378C00CFDF66 /* KeyPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPad.swift; sourceTree = "<group>"; };
 		5659D4ED24A63B6000CFDF66 /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
 		5659D4EF24A63E3D00CFDF66 /* TimeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHelper.swift; sourceTree = "<group>"; };
-		565EAFAC24A4EDD6005059C0 /* SimpleTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		565EAFAC24A4EDD6005059C0 /* TotalTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TotalTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		565EAFAF24A4EDD6005059C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		565EAFB124A4EDD6005059C0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		565EAFB424A4EDD6005059C0 /* Timer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Timer.xcdatamodel; sourceTree = "<group>"; };
@@ -75,6 +76,7 @@
 		56AFC30E24ACC687003DE8BD /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEditView.swift; sourceTree = "<group>"; };
 		56AFC31224ACD439003DE8BD /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		56B5670624B3632200B5E424 /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +127,7 @@
 		565EAFAD24A4EDD6005059C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				565EAFAC24A4EDD6005059C0 /* SimpleTimer.app */,
+				565EAFAC24A4EDD6005059C0 /* TotalTimer.app */,
 				565EAFC524A4EDD9005059C0 /* TimerTests.xctest */,
 				565EAFD024A4EDD9005059C0 /* TimerUITests.xctest */,
 			);
@@ -193,6 +195,7 @@
 		565EAFE324A4EDFE005059C0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				56B5670A24B3688500B5E424 /* Sounds */,
 				565EAFB824A4EDD8005059C0 /* Assets.xcassets */,
 				56AFC30C24ACC43E003DE8BD /* Colors.xcassets */,
 			);
@@ -205,6 +208,14 @@
 				565EAFB324A4EDD6005059C0 /* Timer.xcdatamodeld */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		56B5670A24B3688500B5E424 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				56B5670624B3632200B5E424 /* alarm.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,7 +235,7 @@
 			);
 			name = Timer;
 			productName = Timer;
-			productReference = 565EAFAC24A4EDD6005059C0 /* SimpleTimer.app */;
+			productReference = 565EAFAC24A4EDD6005059C0 /* TotalTimer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		565EAFC424A4EDD9005059C0 /* TimerTests */ = {
@@ -315,6 +326,7 @@
 				56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */,
 				565EAFBC24A4EDD8005059C0 /* Preview Assets.xcassets in Resources */,
 				565EAFB924A4EDD8005059C0 /* Assets.xcassets in Resources */,
+				56B5670724B3632300B5E424 /* alarm.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,8 +539,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rr.SimpleTimer;
-				PRODUCT_NAME = SimpleTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = rr.TotalTimer;
+				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -547,8 +559,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rr.SimpleTimer;
-				PRODUCT_NAME = SimpleTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = rr.TotalTimer;
+				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -6,16 +6,24 @@
 //
 
 import Foundation
-import SwiftUI
 import UserNotifications
+import AVFoundation
 import os.log
 
-struct NotificationManager {
-    
-    @State private var notificationID: String = UUID().uuidString
+var audioPlayer: AVAudioPlayer?
 
+class NotificationManager {
+    
+    // MARK: Properties
+    private var notificationID: String = UUID().uuidString
+    private var alarmTimer: Timer?
+    
+    
+    // MARK: Methods
     func removeNotification() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.notificationID])
+        
+        self.stopAlarmTimer()
     }
 
     func setNotification(timerManager: TimerManager) {
@@ -25,11 +33,11 @@ struct NotificationManager {
             }
         }
         
+        // Remove previous notification if it is overwritten
         self.removeNotification()
         
         let content = UNMutableNotificationContent()
-        content.title = timerManager.label
-        content.sound = UNNotificationSound.default
+        content.title = "\(timerManager.label) is ready!"
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timerManager.seconds), repeats: false)
 
@@ -37,5 +45,43 @@ struct NotificationManager {
         let request = UNNotificationRequest(identifier: self.notificationID, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request)
+        
+        self.startAlarmTimer(timerManager: timerManager)
+    }
+    
+    private func stopAlarmTimer() {
+        self.alarmTimer?.invalidate()
+        self.alarmTimer = nil
+    }
+    
+    private func startAlarmTimer(timerManager: TimerManager) {
+        guard self.alarmTimer == nil else { return }
+        
+        self.alarmTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timerManager.seconds), repeats: false) { _ in
+            self.playSound(resourceName: timerManager.alarmSound)
+        }
+    }
+    
+    private func stopSound() {
+        audioPlayer?.stop()
+    }
+    
+    func playSound(resourceName: String) {
+        let path = Bundle.main.path(forResource: resourceName, ofType: "mp3")!
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            
+            audioPlayer?.numberOfLoops = -1
+            audioPlayer?.play()
+        } catch {
+            os_log("%@", type: .error, error.localizedDescription)
+        }
+    }
+    
+    func reset() {
+        self.removeNotification()
+        self.stopSound()
     }
 }

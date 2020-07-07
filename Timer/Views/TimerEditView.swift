@@ -89,7 +89,7 @@ struct TimerEditView: View {
         .font(.system(size: 20))
         .navigationBarTitle("Edit timer")
         .navigationBarItems(trailing: Button(action: self.save) {
-            Text("Done")
+            Text("Save")
         })
     }
 }

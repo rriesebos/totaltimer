@@ -36,26 +36,18 @@ struct PickerView: View {
     private var sounds: [Sound] = []
     @Binding private var sound: Sound
     
-    @State private var selectedSound: Sound
-    
     
     init(sounds: [Sound], sound: Binding<Sound>) {
         self.sounds = sounds
         
         self._sound = sound
-        self._selectedSound = State(initialValue: sound.wrappedValue)
     }
     
     private func select(sound: Sound) {
-        self.selectedSound.stop()
+        self.sound.stop()
         
-        self.selectedSound = sound
-        self.selectedSound.play()
-    }
-    
-    private func save() {
-        self.sound = self.selectedSound
-        self.presentationMode.wrappedValue.dismiss()
+        self.sound = sound
+        self.sound.play()
     }
     
     var body: some View {
@@ -64,7 +56,7 @@ struct PickerView: View {
                 HStack {
                     Text(sound.displayName)
                     Spacer()
-                    if sound.name == self.selectedSound.name {
+                    if sound.name == self.sound.name {
                         Image(systemName: "checkmark")
                             .foregroundColor(Color.accentColor)
                     }
@@ -78,10 +70,7 @@ struct PickerView: View {
             }
         }
         .onDisappear {
-            self.selectedSound.stop()
+            self.sound.stop()
         }
-        .navigationBarItems(trailing: Button(action: self.save) {
-            Text("Done")
-        })
     }
 }

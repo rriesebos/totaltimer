@@ -12,9 +12,13 @@ import os.log
 class Sound: Hashable {
     
     // MARK: Properties
-    static let alarmSounds = [Sound(name: "alarm", displayName: "Default")]
+    // Array of all available sounds
+    static let alarmSounds = [Sound(name: "alarm", displayName: "Default"),
+                              Sound(name: "alarm2")]
     
     var audioPlayer: AVAudioPlayer?
+    
+    // Name has to equal the file name
     var name: String
     var displayName: String
     

@@ -31,6 +31,7 @@
 		56B5670724B3632300B5E424 /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5670624B3632200B5E424 /* alarm.mp3 */; };
 		56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670B24B4AF5700B5E424 /* SoundPicker.swift */; };
 		56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670E24B4B77D00B5E424 /* Sound.swift */; };
+		56B5671124B4DA7900B5E424 /* alarm2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671024B4DA7900B5E424 /* alarm2.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		56B5670624B3632200B5E424 /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
 		56B5670B24B4AF5700B5E424 /* SoundPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPicker.swift; sourceTree = "<group>"; };
 		56B5670E24B4B77D00B5E424 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		56B5671024B4DA7900B5E424 /* alarm2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm2.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 		56B5670A24B3688500B5E424 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				56B5671024B4DA7900B5E424 /* alarm2.mp3 */,
 				56B5670624B3632200B5E424 /* alarm.mp3 */,
 			);
 			path = Sounds;
@@ -339,6 +342,7 @@
 				565EAFBF24A4EDD8005059C0 /* LaunchScreen.storyboard in Resources */,
 				56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */,
 				565EAFBC24A4EDD8005059C0 /* Preview Assets.xcassets in Resources */,
+				56B5671124B4DA7900B5E424 /* alarm2.mp3 in Resources */,
 				565EAFB924A4EDD8005059C0 /* Assets.xcassets in Resources */,
 				56B5670724B3632300B5E424 /* alarm.mp3 in Resources */,
 			);

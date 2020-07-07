@@ -29,6 +29,8 @@
 		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
 		56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31224ACD439003DE8BD /* ColorPicker.swift */; };
 		56B5670724B3632300B5E424 /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5670624B3632200B5E424 /* alarm.mp3 */; };
+		56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670B24B4AF5700B5E424 /* SoundPicker.swift */; };
+		56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670E24B4B77D00B5E424 /* Sound.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,8 @@
 		56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEditView.swift; sourceTree = "<group>"; };
 		56AFC31224ACD439003DE8BD /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 		56B5670624B3632200B5E424 /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
+		56B5670B24B4AF5700B5E424 /* SoundPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPicker.swift; sourceTree = "<group>"; };
+		56B5670E24B4B77D00B5E424 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,15 +183,10 @@
 		565EAFE224A4EDF0005059C0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				56B5670D24B4B76000B5E424 /* Util */,
 				5660B15624A8DFFE003A38BE /* TimerList.swift */,
 				565EAFB624A4EDD6005059C0 /* TimerDetailView.swift */,
 				56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */,
-				5659D4ED24A63B6000CFDF66 /* TimeView.swift */,
-				5659D4E324A50FF900CFDF66 /* TimePicker.swift */,
-				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
-				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
-				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
-				56AFC31224ACD439003DE8BD /* ColorPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -206,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				565EAFB324A4EDD6005059C0 /* Timer.xcdatamodeld */,
+				56B5670E24B4B77D00B5E424 /* Sound.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -216,6 +216,20 @@
 				56B5670624B3632200B5E424 /* alarm.mp3 */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		56B5670D24B4B76000B5E424 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				5659D4ED24A63B6000CFDF66 /* TimeView.swift */,
+				5659D4E324A50FF900CFDF66 /* TimePicker.swift */,
+				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
+				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
+				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
+				56AFC31224ACD439003DE8BD /* ColorPicker.swift */,
+				56B5670B24B4AF5700B5E424 /* SoundPicker.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,7 +368,9 @@
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
 				5624C2BC24AB6D93001249D1 /* TimerManager.swift in Sources */,
 				56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */,
+				56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */,
 				56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */,
+				56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */,
 				5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */,
 				5659D4F024A63E3D00CFDF66 /* TimeHelper.swift in Sources */,
 				5624C2BE24AB6E66001249D1 /* NotificationManager.swift in Sources */,
@@ -539,10 +555,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rr.TotalTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = rriesebos.totaltimer;
 				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -559,10 +575,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rr.TotalTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = rriesebos.totaltimer;
 				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

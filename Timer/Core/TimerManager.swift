@@ -20,7 +20,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
     @Published var label: String = ""
     @Published var totalSeconds = 0
     @Published var color: UIColor
-    var alarmSound: String
+    @Published var alarmSoundName: String
     
     @Published var timerLengthInSeconds = 0
     @Published var seconds = 0
@@ -36,7 +36,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
     private var notificationManager = NotificationManager()
     
     
-    init(label: String, totalSeconds: Int, color: UIColor, alarmSound: String = "alarm") {
+    init(label: String, totalSeconds: Int, color: UIColor, alarmSoundName: String = "alarm") {
         self.label = label
         self.totalSeconds = totalSeconds
         
@@ -44,7 +44,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         self.seconds = totalSeconds
         
         self.color = color
-        self.alarmSound = alarmSound
+        self.alarmSoundName = alarmSoundName
     }
     
     init(timerData: TimerData) {
@@ -57,7 +57,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         self.seconds = Int(timerData.totalSeconds)
         
         self.color = timerData.color as! UIColor
-        self.alarmSound = timerData.alarmSound ?? "alarm"
+        self.alarmSoundName = timerData.alarmSoundName ?? "alarm"
     }
     
     func set(seconds: Int) {
@@ -118,7 +118,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         if self.seconds > 0 {
             self.notificationManager.setNotification(timerManager: self)
         } else {
-            self.notificationManager.playSound(resourceName: self.alarmSound)
+            self.notificationManager.playSound(resourceName: self.alarmSoundName)
         }
         
         self.updateProgress()

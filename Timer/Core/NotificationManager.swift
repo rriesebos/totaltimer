@@ -38,6 +38,7 @@ class NotificationManager {
         
         let content = UNMutableNotificationContent()
         content.title = "\(timerManager.label) is ready!"
+        content.sound = UNNotificationSound.default
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timerManager.seconds), repeats: false)
 
@@ -58,7 +59,7 @@ class NotificationManager {
         guard self.alarmTimer == nil else { return }
         
         self.alarmTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timerManager.seconds), repeats: false) { _ in
-            self.playSound(resourceName: timerManager.alarmSound)
+            self.playSound(resourceName: timerManager.alarmSoundName)
         }
     }
     

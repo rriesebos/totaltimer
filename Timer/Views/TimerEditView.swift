@@ -18,6 +18,7 @@ struct TimerEditView: View {
     @State private var label: String
     @State private var totalSeconds: Int
     @State private var color: UIColor
+    @State private var alarmSound: Sound
     
     @State private var showTimePicker = false
     @State private var showColorPicker = false
@@ -30,15 +31,19 @@ struct TimerEditView: View {
         self._label = State(initialValue: timerManager.label)
         self._totalSeconds = State(initialValue: timerManager.totalSeconds)
         self._color = State(initialValue: timerManager.color)
+        self._alarmSound = State(initialValue: Sound.alarmSounds.first(where: { $0.name == timerManager.alarmSoundName }) ?? Sound.alarmSounds[0])
     }
     
     // MARK: Methods
     private func save() {
         self.timerManager.label = self.label
+        
         self.timerManager.totalSeconds = self.totalSeconds
         self.timerManager.timerLengthInSeconds = self.totalSeconds
         self.timerManager.seconds = self.totalSeconds
+        
         self.timerManager.color = self.color
+        self.timerManager.alarmSoundName = self.alarmSound.name
         
         self.timerManager.save(managedObjectContext: self.managedObjectContext)
         self.presentationMode.wrappedValue.dismiss()
@@ -76,6 +81,9 @@ struct TimerEditView: View {
                             self.color = uiColor
                         }
                     }
+            }
+            Section(header: Text("ALARM SOUND")) {
+                SoundPicker(sounds: Sound.alarmSounds, sound: self.$alarmSound)
             }
         }
         .font(.system(size: 20))

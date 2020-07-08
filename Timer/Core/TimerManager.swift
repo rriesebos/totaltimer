@@ -74,6 +74,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
             self.timerData?.label = self.label
             self.timerData?.totalSeconds = Int64(self.totalSeconds)
             self.timerData?.color = self.color
+            self.timerData?.alarmSoundName = self.alarmSoundName
 
             do {
                 try managedObjectContext.save()

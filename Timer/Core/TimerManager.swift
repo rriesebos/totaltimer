@@ -57,7 +57,7 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         self.seconds = Int(timerData.totalSeconds)
         
         self.color = timerData.color as! UIColor
-        self.alarmSoundName = timerData.alarmSoundName ?? "alarm"
+        self.alarmSoundName = timerData.alarmSoundName ?? Sound.defaultAlarmSound.name
     }
     
     func set(seconds: Int) {

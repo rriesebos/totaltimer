@@ -31,7 +31,7 @@ struct TimerEditView: View {
         self._label = State(initialValue: timerManager.label)
         self._totalSeconds = State(initialValue: timerManager.totalSeconds)
         self._color = State(initialValue: timerManager.color)
-        self._alarmSound = State(initialValue: Sound.alarmSounds.first(where: { $0.name == timerManager.alarmSoundName }) ?? Sound.alarmSounds[0])
+        self._alarmSound = State(initialValue: Sound.alarmSounds.first(where: { $0.name == timerManager.alarmSoundName }) ?? Sound.defaultAlarmSound)
     }
     
     // MARK: Methods

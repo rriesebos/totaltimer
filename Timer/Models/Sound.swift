@@ -13,8 +13,16 @@ class Sound: Hashable {
     
     // MARK: Properties
     // Array of all available sounds
-    static let alarmSounds = [Sound(name: "alarm", displayName: "Default"),
-                              Sound(name: "alarm2")]
+    static let alarmSounds = [Sound(name: "classic"),
+                              Sound(name: "classic 2"),
+                              Sound(name: "arcade"),
+                              Sound(name: "chimes"),
+                              Sound(name: "bursts"),
+                              Sound(name: "old school")]
+    
+    static var defaultAlarmSound: Sound {
+        return self.alarmSounds[0]
+    }
     
     var audioPlayer: AVAudioPlayer?
     

@@ -129,7 +129,8 @@ struct TimerList: View {
                     }) {
                         Text(self.isSelecting ? "Cancel" : "Select")
                     }
-                    .frame(width: 64, alignment: .leading),
+                    .frame(width: 64, alignment: .leading)
+                    .disabled(self.timerManagers.isEmpty),
                     trailing: HStack(spacing: 0) {
                         Picker(selection: self.$showActive, label: Text("Toggle between all and active")) {
                             Text("All").tag(false)

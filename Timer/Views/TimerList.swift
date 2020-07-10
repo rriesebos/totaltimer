@@ -67,6 +67,9 @@ struct TimerList: View {
         for index in offsets {
             let timerManager = timerManagers[index]
             
+            // Remove pending notification
+            timerManager.removeNotification()
+            
             // Delete core data object
             if let timerData = timerManager.timerData {
                 self.managedObjectContext.delete(timerData)

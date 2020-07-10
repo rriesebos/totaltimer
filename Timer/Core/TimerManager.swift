@@ -197,6 +197,10 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         self.notificationManager.setNotification(timerManager: self)
     }
     
+    func removeNotification() {
+        self.notificationManager.removeNotification()
+    }
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.id)
     }

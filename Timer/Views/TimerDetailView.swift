@@ -37,7 +37,9 @@ struct TimerDetailView: View {
     
     // MARK: View
     var body: some View {
-        VStack(spacing: 64) {
+        VStack(spacing: 72) {
+            Spacer()
+            
             TextField(self.timerManager.label, text: self.$timerManager.label, onEditingChanged: { isEditing in
                 if isEditing {
                     return
@@ -48,11 +50,12 @@ struct TimerDetailView: View {
                 .font(.system(size: 34, weight: .medium, design: .default))
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
+                .padding(.top, -40)
             
-            ZStack {
+            ZStack(alignment: .center) {
                 ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 12, progressLineWidth: 20)
+                    .frame(maxWidth: 600, maxHeight: 600)
                     .scaledToFill()
-                    .padding(.vertical, 16)
                     .onTapGesture {
                         self.showColorPicker = true
                     }
@@ -104,7 +107,7 @@ struct TimerDetailView: View {
                 Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 64))
             }
-            .padding(.bottom, 16)
+            .padding(.bottom, 32)
             .disabled(self.timerManager.totalSeconds == 0)
             .accentColor(Color(self.timerManager.color))
             
@@ -140,5 +143,6 @@ struct TimerView_Previews: PreviewProvider {
         NavigationView {
             TimerDetailView(timerManager: TimerManager(label: "Label", totalSeconds: 10, color: UIColor.blue))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }

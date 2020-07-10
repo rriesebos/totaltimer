@@ -8,6 +8,7 @@
 import Foundation
 import UserNotifications
 import AVFoundation
+import SwiftUI
 import os.log
 
 var audioPlayer: AVAudioPlayer?
@@ -17,6 +18,9 @@ class NotificationManager {
     // MARK: Properties
     private var notificationID: String = UUID().uuidString
     private var alarmTimer: Timer?
+    
+    // Max time a background task is allowed to run in seconds
+    private let maxBackgroundTime = 30
     
     
     // MARK: Methods
@@ -38,7 +42,11 @@ class NotificationManager {
         
         let content = UNMutableNotificationContent()
         content.title = "\(timerManager.label) is ready!"
-        content.sound = UNNotificationSound.default
+        
+        // Attach sound to notification if a background task is not possible
+        if timerManager.seconds >= self.maxBackgroundTime {
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("\(timerManager.alarmSoundName).mp3"))
+        }
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timerManager.seconds), repeats: false)
 
@@ -58,6 +66,14 @@ class NotificationManager {
     private func startAlarmTimer(timerManager: TimerManager) {
         guard self.alarmTimer == nil else { return }
         
+        // Start background task if it is finished in time
+        if timerManager.seconds < self.maxBackgroundTime {
+            var bgTask = UIBackgroundTaskIdentifier(rawValue: 0)
+            bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                UIApplication.shared.endBackgroundTask(bgTask)
+            })
+        }
+        
         self.alarmTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timerManager.seconds), repeats: false) { _ in
             self.playSound(resourceName: timerManager.alarmSoundName)
         }
@@ -72,6 +88,10 @@ class NotificationManager {
         let url = URL(fileURLWithPath: path)
 
         do {
+            // Set category so sound playback can initiate in background
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             
             audioPlayer?.numberOfLoops = -1

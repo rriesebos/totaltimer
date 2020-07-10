@@ -19,6 +19,8 @@ class NotificationManager {
     private var notificationID: String = UUID().uuidString
     private var alarmTimer: Timer?
     
+    private var bgTaskID: UIBackgroundTaskIdentifier?
+    
     // Max time a background task is allowed to run in seconds
     private let maxBackgroundTime = 30
     
@@ -61,16 +63,19 @@ class NotificationManager {
     private func stopAlarmTimer() {
         self.alarmTimer?.invalidate()
         self.alarmTimer = nil
+        
+        self.endBackgroundTask()
     }
     
     private func startAlarmTimer(timerManager: TimerManager) {
         guard self.alarmTimer == nil else { return }
         
+        self.endBackgroundTask()
+        
         // Start background task if it is finished in time
         if timerManager.seconds < self.maxBackgroundTime {
-            var bgTask = UIBackgroundTaskIdentifier(rawValue: 0)
-            bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-                UIApplication.shared.endBackgroundTask(bgTask)
+            self.bgTaskID = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                self.endBackgroundTask()
             })
         }
         
@@ -104,5 +109,13 @@ class NotificationManager {
     func reset() {
         self.removeNotification()
         self.stopSound()
+    }
+    
+    private func endBackgroundTask() {
+        if let bgTaskID = self.bgTaskID {
+            UIApplication.shared.endBackgroundTask(bgTaskID)
+        }
+        
+        self.bgTaskID = nil
     }
 }

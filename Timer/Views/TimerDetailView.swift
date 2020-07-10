@@ -108,7 +108,6 @@ struct TimerDetailView: View {
                     .padding(.horizontal)
                     .scaledToFit()
                 }
-                .padding(.horizontal, 24)
                 
                 Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
                     Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
@@ -120,34 +119,35 @@ struct TimerDetailView: View {
                 
                 Spacer()
             }
-            .navigationBarItems(
-                trailing: Button(action: {
-                    self.editTimer = true
-                    self.timerManager.stopTimer()
-                }) {
-                    Image(systemName: "square.and.pencil")
-                        .font(.system(size: 24))
-                }
-            )
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                self.timerManager.isActive = false
-                
-                if self.timerManager.isPlaying {
-                    self.exitTime = Date()
-                    
-                    // Re-set notification in case the time is less than the allowed background time
-                    self.timerManager.setNotification()
-                }
+            .padding(.horizontal, 24)
+        }
+        .navigationBarItems(
+            trailing: Button(action: {
+                self.editTimer = true
+                self.timerManager.stopTimer()
+            }) {
+                Image(systemName: "square.and.pencil")
+                    .font(.system(size: 24))
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                if self.timerManager.isPlaying {
-                    // Update time using elapsed time when returning from background
-                    let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
-                    self.timerManager.setTime(seconds: lround(Double(self.timerManager.seconds) - elapsedSeconds))
-                }
+        )
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            self.timerManager.isActive = false
+            
+            if self.timerManager.isPlaying {
+                self.exitTime = Date()
                 
-                self.timerManager.isActive = true
+                // Re-set notification in case the time is less than the allowed background time
+                self.timerManager.setNotification()
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            if self.timerManager.isPlaying {
+                // Update time using elapsed time when returning from background
+                let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
+                self.timerManager.setTime(seconds: lround(Double(self.timerManager.seconds) - elapsedSeconds))
+            }
+            
+            self.timerManager.isActive = true
         }
     }
 }

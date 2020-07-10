@@ -193,6 +193,10 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         self.progress = 1.0 - Double(self.seconds) / Double(self.timerLengthInSeconds)
     }
     
+    func setNotification() {
+        self.notificationManager.setNotification(timerManager: self)
+    }
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.id)
     }

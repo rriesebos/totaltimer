@@ -125,6 +125,9 @@ struct TimerDetailView: View {
             if self.timerManager.isPlaying {
                 self.exitTime = Date()
             }
+            
+            // Re-set notification in case the time is less than the possible background time
+            self.timerManager.setNotification()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
             if self.timerManager.isPlaying {

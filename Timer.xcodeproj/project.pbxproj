@@ -28,6 +28,31 @@
 		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
 		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
 		56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31224ACD439003DE8BD /* ColorPicker.swift */; };
+		56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670B24B4AF5700B5E424 /* SoundPicker.swift */; };
+		56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670E24B4B77D00B5E424 /* Sound.swift */; };
+		56B5671824B5FA1E00B5E424 /* classic 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671224B5FA1D00B5E424 /* classic 2.mp3 */; };
+		56B5671924B5FA1E00B5E424 /* arcade.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671324B5FA1D00B5E424 /* arcade.mp3 */; };
+		56B5671A24B5FA1E00B5E424 /* chimes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671424B5FA1D00B5E424 /* chimes.mp3 */; };
+		56B5671B24B5FA1E00B5E424 /* classic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671524B5FA1D00B5E424 /* classic.mp3 */; };
+		56B5671C24B5FA1E00B5E424 /* old school.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671624B5FA1D00B5E424 /* old school.mp3 */; };
+		56B5671D24B5FA1E00B5E424 /* bursts.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671724B5FA1E00B5E424 /* bursts.mp3 */; };
+		56B5671F24B5FC6200B5E424 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671E24B5FC6200B5E424 /* Settings.bundle */; };
+		56B5673424B789B900B5E424 /* Spotlight@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672224B789B900B5E424 /* Spotlight@3x.png */; };
+		56B5673524B789B900B5E424 /* Notifications@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672324B789B900B5E424 /* Notifications@3x.png */; };
+		56B5673624B789B900B5E424 /* IphoneApp@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672424B789B900B5E424 /* IphoneApp@3x.png */; };
+		56B5673724B789B900B5E424 /* Settings@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672524B789B900B5E424 /* Settings@3x.png */; };
+		56B5673824B789B900B5E424 /* timer_icon.ai in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672624B789B900B5E424 /* timer_icon.ai */; };
+		56B5673924B789B900B5E424 /* Spotlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672824B789B900B5E424 /* Spotlight@2x.png */; };
+		56B5673A24B789B900B5E424 /* Notifications@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672924B789B900B5E424 /* Notifications@2x.png */; };
+		56B5673B24B789B900B5E424 /* IpadProApp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672A24B789B900B5E424 /* IpadProApp@2x.png */; };
+		56B5673C24B789B900B5E424 /* IpadApp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672B24B789B900B5E424 /* IpadApp@2x.png */; };
+		56B5673D24B789B900B5E424 /* IphoneApp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672C24B789B900B5E424 /* IphoneApp@2x.png */; };
+		56B5673E24B789B900B5E424 /* Settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672D24B789B900B5E424 /* Settings@2x.png */; };
+		56B5673F24B789B900B5E424 /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5672F24B789B900B5E424 /* Settings.png */; };
+		56B5674024B789B900B5E424 /* AppStore.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673024B789B900B5E424 /* AppStore.png */; };
+		56B5674124B789B900B5E424 /* IpadApp.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673124B789B900B5E424 /* IpadApp.png */; };
+		56B5674224B789B900B5E424 /* Notifications.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673224B789B900B5E424 /* Notifications.png */; };
+		56B5674324B789B900B5E424 /* Spotlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673324B789B900B5E424 /* Spotlight.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +79,7 @@
 		5659D4E524A5378C00CFDF66 /* KeyPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPad.swift; sourceTree = "<group>"; };
 		5659D4ED24A63B6000CFDF66 /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
 		5659D4EF24A63E3D00CFDF66 /* TimeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHelper.swift; sourceTree = "<group>"; };
-		565EAFAC24A4EDD6005059C0 /* SimpleTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		565EAFAC24A4EDD6005059C0 /* TotalTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TotalTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		565EAFAF24A4EDD6005059C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		565EAFB124A4EDD6005059C0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		565EAFB424A4EDD6005059C0 /* Timer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Timer.xcdatamodel; sourceTree = "<group>"; };
@@ -75,6 +100,31 @@
 		56AFC30E24ACC687003DE8BD /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEditView.swift; sourceTree = "<group>"; };
 		56AFC31224ACD439003DE8BD /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		56B5670B24B4AF5700B5E424 /* SoundPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPicker.swift; sourceTree = "<group>"; };
+		56B5670E24B4B77D00B5E424 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		56B5671224B5FA1D00B5E424 /* classic 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "classic 2.mp3"; sourceTree = "<group>"; };
+		56B5671324B5FA1D00B5E424 /* arcade.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = arcade.mp3; sourceTree = "<group>"; };
+		56B5671424B5FA1D00B5E424 /* chimes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chimes.mp3; sourceTree = "<group>"; };
+		56B5671524B5FA1D00B5E424 /* classic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = classic.mp3; sourceTree = "<group>"; };
+		56B5671624B5FA1D00B5E424 /* old school.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "old school.mp3"; sourceTree = "<group>"; };
+		56B5671724B5FA1E00B5E424 /* bursts.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bursts.mp3; sourceTree = "<group>"; };
+		56B5671E24B5FC6200B5E424 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		56B5672224B789B900B5E424 /* Spotlight@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Spotlight@3x.png"; sourceTree = "<group>"; };
+		56B5672324B789B900B5E424 /* Notifications@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Notifications@3x.png"; sourceTree = "<group>"; };
+		56B5672424B789B900B5E424 /* IphoneApp@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IphoneApp@3x.png"; sourceTree = "<group>"; };
+		56B5672524B789B900B5E424 /* Settings@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Settings@3x.png"; sourceTree = "<group>"; };
+		56B5672624B789B900B5E424 /* timer_icon.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = timer_icon.ai; sourceTree = "<group>"; };
+		56B5672824B789B900B5E424 /* Spotlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Spotlight@2x.png"; sourceTree = "<group>"; };
+		56B5672924B789B900B5E424 /* Notifications@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Notifications@2x.png"; sourceTree = "<group>"; };
+		56B5672A24B789B900B5E424 /* IpadProApp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IpadProApp@2x.png"; sourceTree = "<group>"; };
+		56B5672B24B789B900B5E424 /* IpadApp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IpadApp@2x.png"; sourceTree = "<group>"; };
+		56B5672C24B789B900B5E424 /* IphoneApp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IphoneApp@2x.png"; sourceTree = "<group>"; };
+		56B5672D24B789B900B5E424 /* Settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Settings@2x.png"; sourceTree = "<group>"; };
+		56B5672F24B789B900B5E424 /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
+		56B5673024B789B900B5E424 /* AppStore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppStore.png; sourceTree = "<group>"; };
+		56B5673124B789B900B5E424 /* IpadApp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IpadApp.png; sourceTree = "<group>"; };
+		56B5673224B789B900B5E424 /* Notifications.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Notifications.png; sourceTree = "<group>"; };
+		56B5673324B789B900B5E424 /* Spotlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotlight.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +175,7 @@
 		565EAFAD24A4EDD6005059C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				565EAFAC24A4EDD6005059C0 /* SimpleTimer.app */,
+				565EAFAC24A4EDD6005059C0 /* TotalTimer.app */,
 				565EAFC524A4EDD9005059C0 /* TimerTests.xctest */,
 				565EAFD024A4EDD9005059C0 /* TimerUITests.xctest */,
 			);
@@ -177,15 +227,10 @@
 		565EAFE224A4EDF0005059C0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				56B5670D24B4B76000B5E424 /* Util */,
 				5660B15624A8DFFE003A38BE /* TimerList.swift */,
 				565EAFB624A4EDD6005059C0 /* TimerDetailView.swift */,
 				56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */,
-				5659D4ED24A63B6000CFDF66 /* TimeView.swift */,
-				5659D4E324A50FF900CFDF66 /* TimePicker.swift */,
-				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
-				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
-				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
-				56AFC31224ACD439003DE8BD /* ColorPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -193,8 +238,11 @@
 		565EAFE324A4EDFE005059C0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				56B5672024B789B900B5E424 /* Icons */,
+				56B5670A24B3688500B5E424 /* Sounds */,
 				565EAFB824A4EDD8005059C0 /* Assets.xcassets */,
 				56AFC30C24ACC43E003DE8BD /* Colors.xcassets */,
+				56B5671E24B5FC6200B5E424 /* Settings.bundle */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -203,8 +251,83 @@
 			isa = PBXGroup;
 			children = (
 				565EAFB324A4EDD6005059C0 /* Timer.xcdatamodeld */,
+				56B5670E24B4B77D00B5E424 /* Sound.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		56B5670A24B3688500B5E424 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				56B5671324B5FA1D00B5E424 /* arcade.mp3 */,
+				56B5671724B5FA1E00B5E424 /* bursts.mp3 */,
+				56B5671424B5FA1D00B5E424 /* chimes.mp3 */,
+				56B5671224B5FA1D00B5E424 /* classic 2.mp3 */,
+				56B5671524B5FA1D00B5E424 /* classic.mp3 */,
+				56B5671624B5FA1D00B5E424 /* old school.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		56B5670D24B4B76000B5E424 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				5659D4ED24A63B6000CFDF66 /* TimeView.swift */,
+				5659D4E324A50FF900CFDF66 /* TimePicker.swift */,
+				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
+				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
+				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
+				56AFC31224ACD439003DE8BD /* ColorPicker.swift */,
+				56B5670B24B4AF5700B5E424 /* SoundPicker.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		56B5672024B789B900B5E424 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				56B5672124B789B900B5E424 /* 3x */,
+				56B5672624B789B900B5E424 /* timer_icon.ai */,
+				56B5672724B789B900B5E424 /* 2x */,
+				56B5672E24B789B900B5E424 /* 1x */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
+		56B5672124B789B900B5E424 /* 3x */ = {
+			isa = PBXGroup;
+			children = (
+				56B5672224B789B900B5E424 /* Spotlight@3x.png */,
+				56B5672324B789B900B5E424 /* Notifications@3x.png */,
+				56B5672424B789B900B5E424 /* IphoneApp@3x.png */,
+				56B5672524B789B900B5E424 /* Settings@3x.png */,
+			);
+			path = 3x;
+			sourceTree = "<group>";
+		};
+		56B5672724B789B900B5E424 /* 2x */ = {
+			isa = PBXGroup;
+			children = (
+				56B5672824B789B900B5E424 /* Spotlight@2x.png */,
+				56B5672924B789B900B5E424 /* Notifications@2x.png */,
+				56B5672A24B789B900B5E424 /* IpadProApp@2x.png */,
+				56B5672B24B789B900B5E424 /* IpadApp@2x.png */,
+				56B5672C24B789B900B5E424 /* IphoneApp@2x.png */,
+				56B5672D24B789B900B5E424 /* Settings@2x.png */,
+			);
+			path = 2x;
+			sourceTree = "<group>";
+		};
+		56B5672E24B789B900B5E424 /* 1x */ = {
+			isa = PBXGroup;
+			children = (
+				56B5672F24B789B900B5E424 /* Settings.png */,
+				56B5673024B789B900B5E424 /* AppStore.png */,
+				56B5673124B789B900B5E424 /* IpadApp.png */,
+				56B5673224B789B900B5E424 /* Notifications.png */,
+				56B5673324B789B900B5E424 /* Spotlight.png */,
+			);
+			path = 1x;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,7 +347,7 @@
 			);
 			name = Timer;
 			productName = Timer;
-			productReference = 565EAFAC24A4EDD6005059C0 /* SimpleTimer.app */;
+			productReference = 565EAFAC24A4EDD6005059C0 /* TotalTimer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		565EAFC424A4EDD9005059C0 /* TimerTests */ = {
@@ -311,10 +434,33 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56B5674124B789B900B5E424 /* IpadApp.png in Resources */,
+				56B5671A24B5FA1E00B5E424 /* chimes.mp3 in Resources */,
+				56B5673F24B789B900B5E424 /* Settings.png in Resources */,
+				56B5671D24B5FA1E00B5E424 /* bursts.mp3 in Resources */,
+				56B5673624B789B900B5E424 /* IphoneApp@3x.png in Resources */,
 				565EAFBF24A4EDD8005059C0 /* LaunchScreen.storyboard in Resources */,
+				56B5674324B789B900B5E424 /* Spotlight.png in Resources */,
+				56B5674024B789B900B5E424 /* AppStore.png in Resources */,
+				56B5673924B789B900B5E424 /* Spotlight@2x.png in Resources */,
 				56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */,
+				56B5673424B789B900B5E424 /* Spotlight@3x.png in Resources */,
+				56B5673B24B789B900B5E424 /* IpadProApp@2x.png in Resources */,
+				56B5671B24B5FA1E00B5E424 /* classic.mp3 in Resources */,
 				565EAFBC24A4EDD8005059C0 /* Preview Assets.xcassets in Resources */,
+				56B5673C24B789B900B5E424 /* IpadApp@2x.png in Resources */,
+				56B5673D24B789B900B5E424 /* IphoneApp@2x.png in Resources */,
+				56B5671824B5FA1E00B5E424 /* classic 2.mp3 in Resources */,
+				56B5671924B5FA1E00B5E424 /* arcade.mp3 in Resources */,
+				56B5673724B789B900B5E424 /* Settings@3x.png in Resources */,
+				56B5674224B789B900B5E424 /* Notifications.png in Resources */,
+				56B5671C24B5FA1E00B5E424 /* old school.mp3 in Resources */,
+				56B5673A24B789B900B5E424 /* Notifications@2x.png in Resources */,
+				56B5671F24B5FC6200B5E424 /* Settings.bundle in Resources */,
 				565EAFB924A4EDD8005059C0 /* Assets.xcassets in Resources */,
+				56B5673E24B789B900B5E424 /* Settings@2x.png in Resources */,
+				56B5673824B789B900B5E424 /* timer_icon.ai in Resources */,
+				56B5673524B789B900B5E424 /* Notifications@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,7 +488,9 @@
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
 				5624C2BC24AB6D93001249D1 /* TimerManager.swift in Sources */,
 				56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */,
+				56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */,
 				56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */,
+				56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */,
 				5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */,
 				5659D4F024A63E3D00CFDF66 /* TimeHelper.swift in Sources */,
 				5624C2BE24AB6E66001249D1 /* NotificationManager.swift in Sources */,
@@ -519,6 +667,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = DPZXHZK936;
 				ENABLE_PREVIEWS = YES;
@@ -527,8 +676,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rr.SimpleTimer;
-				PRODUCT_NAME = SimpleTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = rriesebos.totaltimer;
+				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -539,6 +688,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = DPZXHZK936;
 				ENABLE_PREVIEWS = YES;
@@ -547,8 +697,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rr.SimpleTimer;
-				PRODUCT_NAME = SimpleTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = rriesebos.totaltimer;
+				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -560,7 +710,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RD5RG7M5JK;
+				DEVELOPMENT_TEAM = DPZXHZK936;
 				INFOPLIST_FILE = TimerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -582,7 +732,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RD5RG7M5JK;
+				DEVELOPMENT_TEAM = DPZXHZK936;
 				INFOPLIST_FILE = TimerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -603,7 +753,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RD5RG7M5JK;
+				DEVELOPMENT_TEAM = DPZXHZK936;
 				INFOPLIST_FILE = TimerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -623,7 +773,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RD5RG7M5JK;
+				DEVELOPMENT_TEAM = DPZXHZK936;
 				INFOPLIST_FILE = TimerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

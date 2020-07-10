@@ -82,7 +82,7 @@ enum TimeLabelType: String {
     var next: TimeLabelType {
         switch self {
         case .hour:
-            return TimeLabelType.hour
+            return TimeLabelType.second
         case .minute:
             return TimeLabelType.hour
         case .second:

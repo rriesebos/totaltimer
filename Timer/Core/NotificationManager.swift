@@ -6,16 +6,30 @@
 //
 
 import Foundation
-import SwiftUI
 import UserNotifications
+import AVFoundation
+import SwiftUI
 import os.log
 
-struct NotificationManager {
-    
-    @State private var notificationID: String = UUID().uuidString
+var audioPlayer: AVAudioPlayer?
 
+class NotificationManager {
+    
+    // MARK: Properties
+    private var notificationID: String = UUID().uuidString
+    private var alarmTimer: Timer?
+    
+    private var bgTaskID: UIBackgroundTaskIdentifier?
+    
+    // Max time a background task is allowed to run in seconds
+    private let maxBackgroundTime = 30
+    
+    
+    // MARK: Methods
     func removeNotification() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.notificationID])
+        
+        self.stopAlarmTimer()
     }
 
     func setNotification(timerManager: TimerManager) {
@@ -25,11 +39,16 @@ struct NotificationManager {
             }
         }
         
+        // Remove previous notification if it is overwritten
         self.removeNotification()
         
         let content = UNMutableNotificationContent()
-        content.title = timerManager.label
-        content.sound = UNNotificationSound.default
+        content.title = "\(timerManager.label) is ready!"
+        
+        // Attach sound to notification if a background task is not possible
+        if timerManager.seconds >= self.maxBackgroundTime {
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("\(timerManager.alarmSoundName).mp3"))
+        }
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timerManager.seconds), repeats: false)
 
@@ -37,5 +56,66 @@ struct NotificationManager {
         let request = UNNotificationRequest(identifier: self.notificationID, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request)
+        
+        self.startAlarmTimer(timerManager: timerManager)
+    }
+    
+    private func stopAlarmTimer() {
+        self.alarmTimer?.invalidate()
+        self.alarmTimer = nil
+        
+        self.endBackgroundTask()
+    }
+    
+    private func startAlarmTimer(timerManager: TimerManager) {
+        guard self.alarmTimer == nil else { return }
+        
+        self.endBackgroundTask()
+        
+        // Start background task if it is finished in time
+        if timerManager.seconds < self.maxBackgroundTime {
+            self.bgTaskID = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                self.endBackgroundTask()
+            })
+        }
+        
+        self.alarmTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timerManager.seconds), repeats: false) { _ in
+            self.playSound(resourceName: timerManager.alarmSoundName)
+        }
+    }
+    
+    private func stopSound() {
+        audioPlayer?.stop()
+    }
+    
+    func playSound(resourceName: String) {
+        let path = Bundle.main.path(forResource: resourceName, ofType: "mp3")!
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            // Set category so sound playback can initiate in background
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            
+            audioPlayer?.numberOfLoops = -1
+            audioPlayer?.play()
+        } catch {
+            os_log("%@", type: .error, error.localizedDescription)
+        }
+    }
+    
+    func reset() {
+        self.removeNotification()
+        self.stopSound()
+    }
+    
+    private func endBackgroundTask() {
+        if let bgTaskID = self.bgTaskID {
+            UIApplication.shared.endBackgroundTask(bgTaskID)
+        }
+        
+        self.bgTaskID = nil
     }
 }

@@ -19,6 +19,8 @@ struct TimerDetailView: View {
     @State private var showTimePicker = false
     @State private var showColorPicker = false
     
+    @State private var editTimer = false
+    
     @State private var exitTime = Date()
     
     @State private var notificationID = UUID().uuidString
@@ -37,78 +39,93 @@ struct TimerDetailView: View {
     
     // MARK: View
     var body: some View {
-        VStack(spacing: 64) {
-            TextField(self.timerManager.label, text: self.$timerManager.label, onEditingChanged: { isEditing in
-                if isEditing {
-                    return
-                }
-                
-                self.timerManager.save(managedObjectContext: self.managedObjectContext)
-            })
-                .font(.system(size: 34, weight: .medium, design: .default))
-                .lineLimit(1)
-                .multilineTextAlignment(.center)
+        ZStack {
+            NavigationLink(destination: TimerEditView(timerManager: self.timerManager), isActive: self.$editTimer) {
+                EmptyView()
+            }
             
-            ZStack {
-                ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 12, progressLineWidth: 20)
-                    .onTapGesture {
-                        self.showColorPicker = true
-                    }
-                    .sheet(isPresented: self.$showColorPicker) {
-                        ColorPicker() { uiColor in
-                            self.timerManager.color = uiColor
-                        }
-                    }
+            VStack(spacing: 72) {
+                Spacer()
                 
-                VStack(alignment: .center, spacing: 16) {
-                    TimeView(seconds: self.timerManager.seconds)
-                        .padding()
-                        .scaledToFit()
+                TextField(self.timerManager.label, text: self.$timerManager.label, onEditingChanged: { isEditing in
+                    if isEditing {
+                        return
+                    }
+                    
+                    self.timerManager.save(managedObjectContext: self.managedObjectContext)
+                })
+                    .font(.system(size: 34, weight: .medium, design: .default))
+                    .lineLimit(1)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, -40)
+                
+                ZStack(alignment: .center) {
+                    ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 12, progressLineWidth: 20)
+                        .frame(maxWidth: 600, maxHeight: 600)
+                        .scaledToFill()
                         .onTapGesture {
-                            self.showTimePicker = true
+                            self.showColorPicker = true
                         }
-                        .sheet(isPresented: self.$showTimePicker) {
-                            TimePicker() { seconds in
-                                self.setTimer(seconds: seconds)
-                                self.timerManager.startTimer()
+                        .sheet(isPresented: self.$showColorPicker) {
+                            ColorPicker() { uiColor in
+                                self.timerManager.color = uiColor
                             }
                         }
+                    
+                    VStack(alignment: .center, spacing: 16) {
+                        TimeView(seconds: self.timerManager.seconds)
+                            .padding()
+                            .scaledToFit()
+                            .onTapGesture {
+                                self.showTimePicker = true
+                            }
+                            .sheet(isPresented: self.$showTimePicker) {
+                                TimePicker() { seconds in
+                                    self.setTimer(seconds: seconds)
+                                    self.timerManager.startTimer()
+                                }
+                            }
 
-                    HStack(spacing: 24) {
-                        Button(action: { self.timerManager.subtractTime(seconds: 30) }) {
-                            Text("- 30")
+                        HStack(spacing: 24) {
+                            Button(action: { self.timerManager.subtractTime(seconds: 30) }) {
+                                Text("- 30")
+                            }
+                            .opacity(self.timerManager.isPlaying ? 1 : 0)
+                            .animation(.linear(duration: 0.1))
+                            Button(action: self.timerManager.reset) {
+                                Image(systemName: "arrow.counterclockwise.circle.fill")
+                                    .font(.system(size: 54))
+                            }
+                            Button(action: { self.timerManager.addTime(seconds: 30) }) {
+                                Text("+ 30")
+                            }
+                            .opacity(self.timerManager.isPlaying ? 1 : 0)
+                            .animation(.linear(duration: 0.1))
                         }
-                        .opacity(self.timerManager.isPlaying ? 1 : 0)
-                        .animation(.linear(duration: 0.1))
-                        Button(action: self.timerManager.reset) {
-                            Image(systemName: "arrow.counterclockwise.circle.fill")
-                                .font(.system(size: 54))
-                        }
-                        Button(action: { self.timerManager.addTime(seconds: 30) }) {
-                            Text("+ 30")
-                        }
-                        .opacity(self.timerManager.isPlaying ? 1 : 0)
-                        .animation(.linear(duration: 0.1))
+                        .font(.system(size: 28))
+                        .accentColor(Color(self.timerManager.color))
                     }
-                    .font(.system(size: 28))
-                    .accentColor(Color(self.timerManager.color))
+                    .padding(.horizontal)
+                    .scaledToFit()
                 }
-                .padding(.horizontal)
-                .scaledToFit()
+                
+                Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
+                    Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                        .font(.system(size: 64))
+                }
+                .padding(.bottom, 32)
+                .disabled(self.timerManager.totalSeconds == 0)
+                .accentColor(Color(self.timerManager.color))
+                
+                Spacer()
             }
             .padding(.horizontal, 24)
-            
-            Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() : self.timerManager.startTimer() }) {
-                Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                    .font(.system(size: 64))
-            }
-            .disabled(self.timerManager.totalSeconds == 0)
-            .accentColor(Color(self.timerManager.color))
-            
-            Spacer()
         }
         .navigationBarItems(
-            trailing: NavigationLink(destination: TimerEditView(timerManager: self.timerManager)) {
+            trailing: Button(action: {
+                self.editTimer = true
+                self.timerManager.stopTimer()
+            }) {
                 Image(systemName: "square.and.pencil")
                     .font(.system(size: 24))
             }
@@ -118,6 +135,9 @@ struct TimerDetailView: View {
             
             if self.timerManager.isPlaying {
                 self.exitTime = Date()
+                
+                // Re-set notification in case the time is less than the allowed background time
+                self.timerManager.setNotification()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
@@ -137,5 +157,6 @@ struct TimerView_Previews: PreviewProvider {
         NavigationView {
             TimerDetailView(timerManager: TimerManager(label: "Label", totalSeconds: 10, color: UIColor.blue))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }

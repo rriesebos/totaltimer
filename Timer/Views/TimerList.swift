@@ -19,7 +19,9 @@ struct TimerList: View {
     @FetchRequest(
         entity: TimerData.entity(),
         sortDescriptors: [
-            NSSortDescriptor(keyPath: \TimerData.label, ascending: true)
+            NSSortDescriptor(keyPath: \TimerData.dateAdded, ascending: true),
+            NSSortDescriptor(keyPath: \TimerData.label, ascending: true),
+            NSSortDescriptor(keyPath: \TimerData.totalSeconds, ascending: true)
         ]
     ) var timersData: FetchedResults<TimerData>
     
@@ -29,6 +31,11 @@ struct TimerList: View {
     @State private var showTimePicker = false
     @State private var timerCount = UserDefaults.standard.integer(forKey: "TimerCount")
     
+    @State private var showActive = false
+    
+    @State private var isSelecting = false
+    @State private var selection = Set<TimerManager>()
+    
     
     // MARK: Methods
     private func addTimer(seconds: Int) {
@@ -36,25 +43,51 @@ struct TimerList: View {
         timerData.label = "Timer \(self.timerCount + 1)"
         timerData.totalSeconds = Int64(seconds)
         timerData.color = UIColor.timerColors[self.timerCount % UIColor.timerColors.count]
+        timerData.dateAdded = Date()
         
         let timerManager = TimerManager(timerData: timerData)
         self.timerManagers.append(timerManager)
         
+        // Start timer after adding
         timerManager.startTimer()
         
+        // Save core data object
         do {
             try self.managedObjectContext.save()
         } catch {
             os_log("%@", type: .error, error.localizedDescription)
         }
 
+        // Increment and save timer counter
         self.timerCount += 1
-        self.updateTimerCounter()
+        UserDefaults.standard.set(self.timerCount, forKey: "TimerCount")
     }
     
-    private func updateTimerCounter(offsets: IndexSet = IndexSet()) {
+    private func deleteTimers(timerManagers: [TimerManager], offsets: IndexSet) {
+        for index in offsets {
+            let timerManager = timerManagers[index]
+            
+            // Remove pending notification
+            timerManager.removeNotification()
+            
+            // Delete core data object
+            if let timerData = timerManager.timerData {
+                self.managedObjectContext.delete(timerData)
+            }
+            
+            // Delete timerManager from (filtered) list
+            if let firstIndex = self.timerManagers.firstIndex(where: { $0.id == timerManager.id }) {
+                self.timerManagers.remove(at: firstIndex)
+                
+                // Decrement timer counter if firstIndex of the filtered list is the last timer
+                if self.showActive && firstIndex == self.timerManagers.count {
+                    self.timerCount -= 1
+                }
+            }
+        }
+        
         // Decrement timerCount if last timer is deleted
-        if offsets.contains(self.timerManagers.count) {
+        if offsets.contains(self.timerManagers.count) && !self.showActive {
             self.timerCount -= 1
         }
         
@@ -64,64 +97,106 @@ struct TimerList: View {
         }
         
         UserDefaults.standard.set(self.timerCount, forKey: "TimerCount")
+
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            os_log("%@", type: .error, error.localizedDescription)
+        }
     }
     
     // MARK: View
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(self.timerManagers, id: \.id) { timerManager in
-                    TimerRow(timerManager: timerManager)
+        let timerManagers = self.timerManagers.filter { !self.showActive || $0.isPlaying }
+        
+        return GeometryReader { geometry in
+            NavigationView {
+                List(selection: self.$selection) {
+                    ForEach(timerManagers, id: \.self) { timerManager in
+                        TimerRow(timerManager: timerManager)
+                    }
+                    .onDelete { offsets in
+                        self.deleteTimers(timerManagers: timerManagers, offsets: offsets)
+                    }
                 }
-                .onDelete { offsets in
-                    for index in offsets {
-                        let timerManager = self.timerManagers[index]
-                        
-                        if let timerData = timerManager.timerData {
-                            self.managedObjectContext.delete(timerData)
+                .environment(\.editMode, self.isSelecting ? .constant(.active) : .constant(.inactive))
+                .navigationBarTitle("Timers")
+                .navigationBarItems(
+                    leading: Button(action: {
+                        withAnimation {
+                            self.isSelecting.toggle()
                         }
+                    }) {
+                        Text(self.isSelecting ? "Cancel" : "Select")
                     }
-                    
-                    self.timerManagers.remove(atOffsets: offsets)
-                    
-                    self.updateTimerCounter(offsets: offsets)
-
-                    do {
-                        try self.managedObjectContext.save()
-                    } catch {
-                        os_log("%@", type: .error, error.localizedDescription)
+                    .frame(width: 64, alignment: .leading),
+                    trailing: HStack(spacing: 0) {
+                        Picker(selection: self.$showActive, label: Text("Toggle between all and active")) {
+                            Text("All").tag(false)
+                            Text("Active").tag(true)
+                        }
+                        .frame(width: 115)
+                        .pickerStyle(SegmentedPickerStyle())
+                        
+                        // Spacer to center picker, the width is
+                        // half the screen width - half the picker width -
+                        // add button width (64) - right side padding (16)
+                        Spacer()
+                            .frame(width: (geometry.size.width - 115) / 2 - 80)
+                        
+                        Button(action: {
+                            if self.isSelecting {
+                                withAnimation {
+                                    self.isSelecting = false
+                                }
+                                
+                                if self.showActive {
+                                    // Stop selected timers
+                                    for timerManager in self.selection {
+                                        timerManager.stopTimer()
+                                    }
+                                } else {
+                                    // Play selected timers
+                                    for timerManager in self.selection {
+                                        timerManager.startTimer()
+                                    }
+                                }
+                                
+                                self.selection.removeAll()
+                            } else {
+                                self.showTimePicker = true
+                            }
+                        }) {
+                            if self.isSelecting {
+                                if self.showActive {
+                                    Text("Pause")
+                                } else {
+                                    Text("Play")
+                                }
+                            } else {
+                                Text("Add")
+                            }
+                        }
+                        .frame(width: 64, alignment: .trailing)
+                        .disabled(self.selection.isEmpty && self.isSelecting)
                     }
+                )
+            }
+            .sheet(isPresented: self.$showTimePicker) {
+                TimePicker() { seconds in
+                    self.addTimer(seconds: seconds)
                 }
             }
-            .navigationBarTitle("Timers")
-            .navigationBarItems(
-                leading: EditButton(),
-                trailing: Button(action: { self.showTimePicker = true }) {
-                    Text("Add")
+            .navigationViewStyle(StackNavigationViewStyle())
+            .onAppear {
+                guard self.firstFetch else { return }
+                
+                self.timerManagers = self.timersData.map {
+                    TimerManager(timerData: $0)
                 }
-            )
-        }
-        .sheet(isPresented: self.$showTimePicker) {
-            TimePicker() { seconds in
-                self.addTimer(seconds: seconds)
+                
+                self.firstFetch = false
             }
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear {
-            guard self.firstFetch else { return }
-            
-            self.timerManagers = self.timersData.map {
-                TimerManager(timerData: $0)
-            }
-            
-            // Sort timerManagers by label length (alphabetically if equal)
-            self.timerManagers.sort {
-                return $0.label.count < $1.label.count
-            }
-            
-            self.updateTimerCounter()
-            
-            self.firstFetch = false
         }
     }
 }
@@ -151,7 +226,7 @@ struct TimerRow: View {
             HStack(alignment: .center, spacing: 24) {
                 ZStack {
                     ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 4, progressLineWidth: 4)
-                            .frame(width: 46, height: 45)
+                            .frame(width: 44, height: 44)
                     
                     Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() :
                         self.timerManager.seconds == 0 ? self.timerManager.reset() : self.timerManager.startTimer() }) {
@@ -172,22 +247,6 @@ struct TimerRow: View {
                         .foregroundColor(Color.secondary)
                 }
                 .font(.system(size: 20))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                self.timerManager.isActive = false
-                
-                if self.timerManager.isPlaying {
-                    self.exitTime = Date()
-                }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                if self.timerManager.isPlaying {
-                    // Update time using elapsed time when returning from background
-                    let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
-                    self.timerManager.setTime(seconds: lround(Double(self.timerManager.seconds) - elapsedSeconds))
-                }
-                
-                self.timerManager.isActive = true
             }
         }
     }

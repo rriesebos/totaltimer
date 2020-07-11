@@ -91,18 +91,17 @@ class NotificationManager {
     func playSound(resourceName: String) {
         let path = Bundle.main.path(forResource: resourceName, ofType: "mp3")!
         let url = URL(fileURLWithPath: path)
-
-        do {
-            // Set category so sound playback can initiate in background
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            
-            audioPlayer?.numberOfLoops = -1
-            audioPlayer?.play()
-        } catch {
-            os_log("%@", type: .error, error.localizedDescription)
+        
+        // Start playing sound on a background queue
+        DispatchQueue.global(qos: .background).async {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                
+                audioPlayer?.numberOfLoops = -1
+                audioPlayer?.play()
+            } catch {
+                os_log("%@", type: .error, error.localizedDescription)
+            }
         }
     }
     

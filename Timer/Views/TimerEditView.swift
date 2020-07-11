@@ -55,16 +55,20 @@ struct TimerEditView: View {
                     .padding(.vertical, 4)
             }
             Section(header: Text("TIME")) {
-                Text(TimeHelper.secondsToTimeString(seconds: self.totalSeconds))
-                    .padding(.vertical, 4)
-                    .onTapGesture {
-                        self.showTimePicker = true
+                HStack {
+                    Text(TimeHelper.secondsToTimeString(seconds: self.totalSeconds))
+                        .padding(.vertical, 4)
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    self.showTimePicker = true
+                }
+                .sheet(isPresented: self.$showTimePicker) {
+                    TimePicker() { seconds in
+                        self.totalSeconds = seconds
                     }
-                    .sheet(isPresented: self.$showTimePicker) {
-                        TimePicker() { seconds in
-                            self.totalSeconds = seconds
-                        }
-                    }
+                }
             }
             Section(header: Text("COLOR")) {
                 RoundedRectangle(cornerRadius: 8)

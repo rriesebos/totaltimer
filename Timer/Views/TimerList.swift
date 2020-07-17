@@ -114,6 +114,7 @@ struct TimerList: View {
                 List(selection: self.$selection) {
                     ForEach(timerManagers, id: \.self) { timerManager in
                         TimerRow(timerManager: timerManager)
+                            .disabled(self.isSelecting)
                     }
                     .onDelete { offsets in
                         self.deleteTimers(timerManagers: timerManagers, offsets: offsets)

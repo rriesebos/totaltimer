@@ -8,7 +8,10 @@
 	<array>
 		<dict>
 			<key>FooterText</key>
-			<string>Sound effects obtained from https://www.zapsplat.com</string>
+			<string>Sound effects obtained from https://www.zapsplat.com
+
+Preview images created using 'Previewed' at https://previewed.app
+            </string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

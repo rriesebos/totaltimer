@@ -20,7 +20,9 @@ struct TimePicker: View {
     @State private var minute = ""
     @State private var second = ""
     
-    @State private var selectedTimeLabel = TimeLabelType.second
+    @State private var selectedTimeLabel = TimeLabelType.hour
+    // Current position in the time label
+    @State private var position = 0
     
     
     // MARK: Initializer
@@ -32,23 +34,23 @@ struct TimePicker: View {
     private func keyPressed(key: Key) {
         switch key {
         case let Key.numerical(value):
-            if Int(self.selectedTextBinding(type: self.selectedTimeLabel).wrappedValue) ?? 0 > 9 && self.fillableNextLabelExists(type: self.selectedTimeLabel) {
-                self.selectedTimeLabel = selectedTimeLabel.next
-            }
-            
             self.add(selectedTextBinding: self.selectedTextBinding(type: self.selectedTimeLabel), value: value)
+            
+            if self.position == 1 {
+                self.selectedTimeLabel = selectedTimeLabel.next
+                self.position = 0
+            } else {
+                self.position += 1
+            }
         case Key.delete:
+            self.position = max(self.position - 1, 0)
             self.delete(selectedTextBinding: self.selectedTextBinding(type: self.selectedTimeLabel))
         case Key.clear:
+            self.position = 0
             self.clear(selectedTextBinding: self.selectedTextBinding(type: self.selectedTimeLabel))
         }
         
         self.seconds = TimeHelper.timeToSeconds(hour: self.hour, minute: self.minute, second: self.second)
-    }
-    
-    private func fillableNextLabelExists(type: TimeLabelType) -> Bool {
-        return Int(self.selectedTextBinding(type: type.next).wrappedValue) ?? 0 < 10
-            || Int(self.selectedTextBinding(type: type.next.next).wrappedValue) ?? 0 < 10
     }
     
     private func selectedTextBinding(type: TimeLabelType) -> Binding<String> {
@@ -70,10 +72,7 @@ struct TimePicker: View {
     
     private func delete(selectedTextBinding: Binding<String>) {
         if selectedTextBinding.wrappedValue.isEmpty {
-            if Int(self.selectedTextBinding(type: self.selectedTimeLabel.next).wrappedValue) ?? 0 != 0 {
-                self.selectedTimeLabel = self.selectedTimeLabel.next
-            }
-
+            self.selectedTimeLabel = self.selectedTimeLabel.previous
             return
         }
         
@@ -85,7 +84,7 @@ struct TimePicker: View {
         self.minute = ""
         self.second = ""
         
-        self.selectedTimeLabel = TimeLabelType.second
+        self.selectedTimeLabel = TimeLabelType.hour
     }
     
     private func pickTime() {
@@ -97,7 +96,7 @@ struct TimePicker: View {
     var body: some View {
         VStack(alignment: .center, spacing: 40) {
             Spacer()
-            TimeView(hour: self.hour, minute: self.minute, second: self.second, selectedTimeLabel: self.$selectedTimeLabel)
+            TimeView(hour: self.hour, minute: self.minute, second: self.second, selectedTimeLabel: self.$selectedTimeLabel, position: self.$position)
             KeyPad(action: self.keyPressed)
                 .padding(4)
             Button(action: { self.pickTime() }) {

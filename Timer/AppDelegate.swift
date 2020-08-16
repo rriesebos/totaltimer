@@ -13,6 +13,7 @@ import AVFoundation
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
+    // Shared timer manager to manage references to timers
     var sharedTimerManager = SharedTimerManager()
     
 

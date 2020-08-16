@@ -49,6 +49,7 @@ struct TimerList: View {
         
         let timerManager = TimerManager(timerData: timerData)
         
+        // Add timer to timerManager list and sharedTimerManager
         self.timerManagers.append(timerManager)
         self.sharedTimerManager.timerManagers[timerManager.id.uuidString] = timerManager
         
@@ -84,6 +85,7 @@ struct TimerList: View {
             
             // Delete timerManager from (filtered) list
             if let firstIndex = self.timerManagers.firstIndex(where: { $0.id == timerManager.id }) {
+                // Remove timer from timerManager list and sharedTimerManager
                 self.timerManagers.remove(at: firstIndex)
                 self.sharedTimerManager.timerManagers.removeValue(forKey: timerManager.id.uuidString)
                 
@@ -201,11 +203,12 @@ struct TimerList: View {
             .onAppear {
                 guard self.firstFetch else { return }
                 
+                // Initialize timerManager list with stored timers
                 self.timerManagers = self.timersData.map {
                     TimerManager(timerData: $0)
                 }
                 
-                // Add timers to the shared timer manager
+                // Add timers to the sharedTimerManager
                 for timerManager in self.timerManagers {
                     self.sharedTimerManager.timerManagers[timerManager.id.uuidString] = timerManager
                 }

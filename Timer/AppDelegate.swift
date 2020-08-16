@@ -100,13 +100,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let userInfo = response.notification.request.content.userInfo
         let id = userInfo["TIMER_MANAGER_ID"] as! String
         
-        switch response.actionIdentifier {
-        case UNNotificationDismissActionIdentifier:
+        if case response.actionIdentifier = UNNotificationDismissActionIdentifier {
             // Reset timer when the alarm notification is dismissed
             let timerManager = self.sharedTimerManager.timerManagers[id]
             timerManager?.reset()
-        default:
-            break
         }
         
         completionHandler()

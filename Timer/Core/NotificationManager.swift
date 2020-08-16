@@ -44,6 +44,8 @@ class NotificationManager {
         
         let content = UNMutableNotificationContent()
         content.title = "\(timerManager.label) is ready!"
+        content.userInfo = ["TIMER_MANAGER_ID": timerManager.id.uuidString]
+        content.categoryIdentifier = "ALARM"
         
         // Attach sound to notification if a background task is not possible
         if timerManager.seconds >= self.maxBackgroundTime {

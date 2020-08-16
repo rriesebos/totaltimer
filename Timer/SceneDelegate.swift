@@ -24,7 +24,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let timerList = TimerList().environment(\.managedObjectContext, context)
+        // Create and add the SharedTimerManager environment object
+        let sharedTimerManager = (UIApplication.shared.delegate as! AppDelegate).sharedTimerManager
+        let timerList = TimerList()
+            .environment(\.managedObjectContext, context)
+            .environmentObject(sharedTimerManager)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

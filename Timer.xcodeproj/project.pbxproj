@@ -53,6 +53,7 @@
 		56B5674124B789B900B5E424 /* IpadApp.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673124B789B900B5E424 /* IpadApp.png */; };
 		56B5674224B789B900B5E424 /* Notifications.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673224B789B900B5E424 /* Notifications.png */; };
 		56B5674324B789B900B5E424 /* Spotlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 56B5673324B789B900B5E424 /* Spotlight.png */; };
+		56F40E7B24E951FE004C2E7E /* SharedTimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F40E7A24E951FE004C2E7E /* SharedTimerManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,7 @@
 		56B5673124B789B900B5E424 /* IpadApp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IpadApp.png; sourceTree = "<group>"; };
 		56B5673224B789B900B5E424 /* Notifications.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Notifications.png; sourceTree = "<group>"; };
 		56B5673324B789B900B5E424 /* Spotlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotlight.png; sourceTree = "<group>"; };
+		56F40E7A24E951FE004C2E7E /* SharedTimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTimerManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 		5624C2BB24AB6C86001249D1 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				56F40E7A24E951FE004C2E7E /* SharedTimerManager.swift */,
 				5660B15424A8DCB6003A38BE /* TimerManager.swift */,
 				5659D4EF24A63E3D00CFDF66 /* TimeHelper.swift */,
 				5624C2BD24AB6E66001249D1 /* NotificationManager.swift */,
@@ -497,6 +500,7 @@
 				56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */,
 				5624C2C024AB7B63001249D1 /* ProgressCircle.swift in Sources */,
 				565EAFB724A4EDD6005059C0 /* TimerDetailView.swift in Sources */,
+				56F40E7B24E951FE004C2E7E /* SharedTimerManager.swift in Sources */,
 				5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */,
 				5659D4EE24A63B6000CFDF66 /* TimeView.swift in Sources */,
 				5624C2BA24AA5E4F001249D1 /* Timer.xcdatamodeld in Sources */,
@@ -667,7 +671,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = DPZXHZK936;
 				ENABLE_PREVIEWS = YES;
@@ -676,6 +680,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = rriesebos.totaltimer;
 				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;
@@ -688,7 +693,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = DPZXHZK936;
 				ENABLE_PREVIEWS = YES;
@@ -697,6 +702,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = rriesebos.totaltimer;
 				PRODUCT_NAME = TotalTimer;
 				SWIFT_VERSION = 5.0;

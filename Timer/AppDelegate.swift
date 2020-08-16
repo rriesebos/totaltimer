@@ -13,11 +13,17 @@ import AVFoundation
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
-
+    // Shared timer manager to manage references to timers
+    var sharedTimerManager = SharedTimerManager()
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        UNUserNotificationCenter.current().delegate = self
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.delegate = self
+        
+        let category = UNNotificationCategory(identifier: "ALARM", actions: [], intentIdentifiers: [], options: .customDismissAction)
+        notificationCenter.setNotificationCategories([category])
         
         // Set AVAudioSession category so sound playback can initiate in background
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
@@ -88,6 +94,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // MARK: - UNUserNotificationCenterDelegate
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .badge, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        let id = userInfo["TIMER_MANAGER_ID"] as! String
+        
+        if case response.actionIdentifier = UNNotificationDismissActionIdentifier {
+            // Reset timer when the alarm notification is dismissed
+            let timerManager = self.sharedTimerManager.timerManagers[id]
+            timerManager?.reset()
+        }
+        
+        completionHandler()
     }
 
 }

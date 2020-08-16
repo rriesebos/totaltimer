@@ -119,6 +119,8 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         if self.seconds > 0 {
             self.notificationManager.setNotification(timerManager: self)
         } else {
+            // Remove pending notification and play sound
+            self.notificationManager.removeNotification()
             self.notificationManager.playSound(resourceName: self.alarmSoundName)
         }
         

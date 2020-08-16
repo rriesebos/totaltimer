@@ -25,6 +25,8 @@ struct TimerList: View {
         ]
     ) var timersData: FetchedResults<TimerData>
     
+    @EnvironmentObject var sharedTimerManager: SharedTimerManager
+    
     @State private var timerManagers: [TimerManager] = []
     @State private var firstFetch = true
     
@@ -46,7 +48,10 @@ struct TimerList: View {
         timerData.dateAdded = Date()
         
         let timerManager = TimerManager(timerData: timerData)
+        
+        // Add timer to timerManager list and sharedTimerManager
         self.timerManagers.append(timerManager)
+        self.sharedTimerManager.timerManagers[timerManager.id.uuidString] = timerManager
         
         // Start timer after adding
         timerManager.startTimer()
@@ -70,6 +75,9 @@ struct TimerList: View {
             // Remove pending notification
             timerManager.removeNotification()
             
+            // Stop alarm
+            timerManager.reset()
+            
             // Delete core data object
             if let timerData = timerManager.timerData {
                 self.managedObjectContext.delete(timerData)
@@ -77,7 +85,9 @@ struct TimerList: View {
             
             // Delete timerManager from (filtered) list
             if let firstIndex = self.timerManagers.firstIndex(where: { $0.id == timerManager.id }) {
+                // Remove timer from timerManager list and sharedTimerManager
                 self.timerManagers.remove(at: firstIndex)
+                self.sharedTimerManager.timerManagers.removeValue(forKey: timerManager.id.uuidString)
                 
                 // Decrement timer counter if firstIndex of the filtered list is the last timer
                 if self.showActive && firstIndex == self.timerManagers.count {
@@ -114,6 +124,7 @@ struct TimerList: View {
                 List(selection: self.$selection) {
                     ForEach(timerManagers, id: \.self) { timerManager in
                         TimerRow(timerManager: timerManager)
+                            .disabled(self.isSelecting)
                     }
                     .onDelete { offsets in
                         self.deleteTimers(timerManagers: timerManagers, offsets: offsets)
@@ -192,8 +203,14 @@ struct TimerList: View {
             .onAppear {
                 guard self.firstFetch else { return }
                 
+                // Initialize timerManager list with stored timers
                 self.timerManagers = self.timersData.map {
                     TimerManager(timerData: $0)
+                }
+                
+                // Add timers to the sharedTimerManager
+                for timerManager in self.timerManagers {
+                    self.sharedTimerManager.timerManagers[timerManager.id.uuidString] = timerManager
                 }
                 
                 self.firstFetch = false

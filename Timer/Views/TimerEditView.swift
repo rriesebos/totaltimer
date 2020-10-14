@@ -18,6 +18,7 @@ struct TimerEditView: View {
     @State private var label: String
     @State private var totalSeconds: Int
     @State private var color: UIColor
+    @State private var customColor = Color.clear
     @State private var alarmSound: Sound
     
     @State private var showTimePicker = false
@@ -71,18 +72,32 @@ struct TimerEditView: View {
                 }
             }
             Section(header: Text("COLOR")) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(self.color))
-                    .frame(height: 36)
-                    .padding(.vertical, 8)
-                    .onTapGesture {
-                        self.showColorPicker = true
-                    }
-                    .sheet(isPresented: self.$showColorPicker) {
-                        ColorPicker() { uiColor in
-                            self.color = uiColor
+                HStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(self.color))
+                        .frame(height: 36)
+                        .padding(.vertical, 8)
+                        .onTapGesture {
+                            self.showColorPicker = true
                         }
+                        .sheet(isPresented: self.$showColorPicker) {
+                            TimerColorPicker() { color in
+                                self.color = color
+                                self.customColor = .clear
+                            }
+                        }
+                    if #available(iOS 14.0, *) {
+                        ColorPicker("", selection: self.$customColor)
+                            .frame(width: 32)
+                            .onChange(of: self.customColor, perform: { _ in
+                                if self.customColor == .clear {
+                                    return
+                                }
+                                
+                                self.color = UIColor(self.customColor)
+                            })
                     }
+                }
             }
             Section(header: Text("ALARM SOUND")) {
                 SoundPicker(sounds: Sound.alarmSounds, sound: self.$alarmSound)

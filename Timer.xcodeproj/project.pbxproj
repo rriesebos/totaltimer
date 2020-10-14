@@ -27,7 +27,7 @@
 		56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56AFC30C24ACC43E003DE8BD /* Colors.xcassets */; };
 		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
 		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
-		56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31224ACD439003DE8BD /* ColorPicker.swift */; };
+		56AFC31324ACD439003DE8BD /* TimerColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31224ACD439003DE8BD /* TimerColorPicker.swift */; };
 		56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670B24B4AF5700B5E424 /* SoundPicker.swift */; };
 		56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B5670E24B4B77D00B5E424 /* Sound.swift */; };
 		56B5671824B5FA1E00B5E424 /* classic 2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56B5671224B5FA1D00B5E424 /* classic 2.mp3 */; };
@@ -100,7 +100,7 @@
 		56AFC30C24ACC43E003DE8BD /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		56AFC30E24ACC687003DE8BD /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEditView.swift; sourceTree = "<group>"; };
-		56AFC31224ACD439003DE8BD /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		56AFC31224ACD439003DE8BD /* TimerColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerColorPicker.swift; sourceTree = "<group>"; };
 		56B5670B24B4AF5700B5E424 /* SoundPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPicker.swift; sourceTree = "<group>"; };
 		56B5670E24B4B77D00B5E424 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		56B5671224B5FA1D00B5E424 /* classic 2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "classic 2.mp3"; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 				5659D4E524A5378C00CFDF66 /* KeyPad.swift */,
 				5624C2BF24AB7B63001249D1 /* ProgressCircle.swift */,
 				56AFC30E24ACC687003DE8BD /* ColorExtension.swift */,
-				56AFC31224ACD439003DE8BD /* ColorPicker.swift */,
+				56AFC31224ACD439003DE8BD /* TimerColorPicker.swift */,
 				56B5670B24B4AF5700B5E424 /* SoundPicker.swift */,
 			);
 			path = Util;
@@ -396,7 +396,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = rriesebos;
 				TargetAttributes = {
 					565EAFAB24A4EDD6005059C0 = {
@@ -490,7 +490,7 @@
 			files = (
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
 				5624C2BC24AB6D93001249D1 /* TimerManager.swift in Sources */,
-				56AFC31324ACD439003DE8BD /* ColorPicker.swift in Sources */,
+				56AFC31324ACD439003DE8BD /* TimerColorPicker.swift in Sources */,
 				56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */,
 				56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */,
 				56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */,
@@ -578,6 +578,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -638,6 +639,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

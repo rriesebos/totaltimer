@@ -266,6 +266,25 @@ struct TimerRow: View {
                 }
                 .font(.system(size: 20))
             }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                self.timerManager.isActive = false
+                
+                if self.timerManager.isPlaying {
+                    self.exitTime = Date()
+                    
+                    // Re-set notification in case the time is less than the allowed background time
+                    self.timerManager.setNotification()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                if self.timerManager.isPlaying {
+                    // Update time using elapsed time when returning from background
+                    let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
+                    self.timerManager.setTime(seconds: lround(Double(self.timerManager.seconds) - elapsedSeconds))
+                }
+                
+                self.timerManager.isActive = true
+            }
         }
     }
 }

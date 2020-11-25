@@ -10,7 +10,7 @@ import SwiftUI
 struct TimerColorPicker: View {
     
     // MARK: Properties
-    @State private var customColor = Color.red
+    @State private var customColor = Color.clear
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -39,15 +39,6 @@ struct TimerColorPicker: View {
                             self.presentationMode.wrappedValue.dismiss()
                         }
                 }
-//                ColorPicker("test text", selection: self.$customColor)
-//                Button(action: {
-//
-//                }, label: {
-//                    RoundedRectangle(cornerRadius: 8)
-//                        .stroke(style: StrokeStyle(lineWidth: 2))
-//                        .frame(height: 40)
-//                        .overlay(Text("Custom color"))
-//                })
             }
             .padding()
             

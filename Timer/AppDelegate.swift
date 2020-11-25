@@ -48,14 +48,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     // MARK: - Core Data stack
 
-    lazy var persistentContainer: NSPersistentContainer = {
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
         */
-        let container = NSPersistentContainer(name: "Timer")
+        let container = NSPersistentCloudKitContainer(name: "Timer")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -72,6 +72,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        
         return container
     }()
 
@@ -102,11 +106,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if case response.actionIdentifier = UNNotificationDismissActionIdentifier {
             // Reset timer when the alarm notification is dismissed
-            let timerManager = self.sharedTimerManager.timerManagers[id]
-            timerManager?.reset()
+            let timer = self.sharedTimerManager.timers[id]
+            timer?.reset()
         }
         
         completionHandler()
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Invalidate all timers when app is closed
+        for timer in self.sharedTimerManager.timers.values {
+            timer.reset()
+        }
     }
 
 }

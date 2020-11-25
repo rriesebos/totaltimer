@@ -13,11 +13,12 @@ struct TimerEditView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var timerManager: TimerManager
+    @ObservedObject var timer: TimerData
     
     @State private var label: String
     @State private var totalSeconds: Int
     @State private var color: UIColor
+    @State private var customColor = Color.clear
     @State private var alarmSound: Sound
     
     @State private var showTimePicker = false
@@ -25,25 +26,25 @@ struct TimerEditView: View {
     
     
     // MARK: Initializer
-    init(timerManager: TimerManager) {
-        self.timerManager = timerManager
+    init(timer: TimerData) {
+        self.timer = timer
         
-        self._label = State(initialValue: timerManager.label)
-        self._totalSeconds = State(initialValue: timerManager.totalSeconds)
-        self._color = State(initialValue: timerManager.color)
-        self._alarmSound = State(initialValue: Sound.alarmSounds.first(where: { $0.name == timerManager.alarmSoundName }) ?? Sound.defaultAlarmSound)
+        self._label = State(initialValue: timer.label)
+        self._totalSeconds = State(initialValue: Int(timer.totalSeconds))
+        self._color = State(initialValue: timer.color as! UIColor)
+        self._alarmSound = State(initialValue: Sound.alarmSounds.first(where: { $0.name == timer.alarmSoundName }) ?? Sound.defaultAlarmSound)
     }
     
     // MARK: Methods
     private func save() {
-        self.timerManager.label = self.label
+        self.timer.label = self.label
         
-        self.timerManager.set(seconds: self.totalSeconds)
+        self.timer.set(seconds: self.totalSeconds)
         
-        self.timerManager.color = self.color
-        self.timerManager.alarmSoundName = self.alarmSound.name
+        self.timer.color = self.color
+        self.timer.alarmSoundName = self.alarmSound.name
         
-        self.timerManager.save(managedObjectContext: self.managedObjectContext)
+        self.timer.save(managedObjectContext: self.managedObjectContext)
         self.presentationMode.wrappedValue.dismiss()
     }
     
@@ -71,18 +72,32 @@ struct TimerEditView: View {
                 }
             }
             Section(header: Text("COLOR")) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(self.color))
-                    .frame(height: 36)
-                    .padding(.vertical, 8)
-                    .onTapGesture {
-                        self.showColorPicker = true
-                    }
-                    .sheet(isPresented: self.$showColorPicker) {
-                        ColorPicker() { uiColor in
-                            self.color = uiColor
+                HStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(self.color))
+                        .frame(height: 36)
+                        .padding(.vertical, 8)
+                        .onTapGesture {
+                            self.showColorPicker = true
                         }
+                        .sheet(isPresented: self.$showColorPicker) {
+                            TimerColorPicker() { color in
+                                self.color = color
+                                self.customColor = .clear
+                            }
+                        }
+                    if #available(iOS 14.0, *) {
+                        ColorPicker("", selection: self.$customColor)
+                            .frame(width: 32)
+                            .onChange(of: self.customColor, perform: { _ in
+                                if self.customColor == .clear {
+                                    return
+                                }
+                                
+                                self.color = UIColor(self.customColor)
+                            })
                     }
+                }
             }
             Section(header: Text("ALARM SOUND")) {
                 SoundPicker(sounds: Sound.alarmSounds, sound: self.$alarmSound)
@@ -98,6 +113,13 @@ struct TimerEditView: View {
 
 struct TimerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TimerEditView(timerManager: TimerManager(label: "Label", totalSeconds: 10, color: UIColor.blue))
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let timer = TimerData.init(context: context)
+        timer.label = "Label"
+        timer.totalSeconds = 10
+        timer.color = UIColor.blue
+
+        return TimerEditView(timer: timer)
+            .environment(\.managedObjectContext, context)
     }
 }

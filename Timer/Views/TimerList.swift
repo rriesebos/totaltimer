@@ -91,9 +91,18 @@ struct TimerList: View {
             return
         }
         
-        // Set current count to the count (+ 1) of the previous timer
-        let previousCount = Int(self.timers.last!.label.components(separatedBy: CharacterSet.decimalDigits.inverted).joined())
-        self.timerCount = previousCount ?? 0
+        // Set current count to the count (+ 1) of the previous timer, pattern match to account for renaming
+        let lastLabel = self.timers.last!.label
+        let regex = try? NSRegularExpression(pattern: #"Timer (\d+)"#, options: [])
+        if let regex = regex,
+           let match = regex.firstMatch(in: lastLabel, range: NSRange(lastLabel.startIndex..., in: lastLabel)),
+           let range = Range(match.range(at: 1), in: lastLabel) {
+            self.timerCount = Int(lastLabel[range]) ?? 0
+            return
+        }
+        
+        // If previous timer is renamed set timer count to the length of the timers
+        self.timerCount = self.timers.count
     }
     
     // MARK: View

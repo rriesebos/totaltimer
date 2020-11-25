@@ -108,6 +108,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         completionHandler()
     }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Invalidate all timers when app is closed
+        for timerManager in self.sharedTimerManager.timerManagers.values {
+            timerManager.reset()
+        }
+    }
 
 }
 

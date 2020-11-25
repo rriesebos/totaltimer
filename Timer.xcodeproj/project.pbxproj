@@ -23,8 +23,8 @@
 		565EAFCA24A4EDD9005059C0 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFC924A4EDD9005059C0 /* TimerTests.swift */; };
 		565EAFD524A4EDD9005059C0 /* TimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565EAFD424A4EDD9005059C0 /* TimerUITests.swift */; };
 		5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5660B15624A8DFFE003A38BE /* TimerList.swift */; };
-		5664AA3B256E883600C53BAA /* TimerData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5664AA39256E883600C53BAA /* TimerData+CoreDataClass.swift */; };
 		5664AA3C256E883600C53BAA /* TimerData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5664AA3A256E883600C53BAA /* TimerData+CoreDataProperties.swift */; };
+		5664AA7C256EB37600C53BAA /* TimerData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5664AA39256E883600C53BAA /* TimerData+CoreDataClass.swift */; };
 		56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56AFC30C24ACC43E003DE8BD /* Colors.xcassets */; };
 		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
 		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
@@ -508,8 +508,8 @@
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
 				56AFC31324ACD439003DE8BD /* TimerColorPicker.swift in Sources */,
 				56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */,
-				5664AA3B256E883600C53BAA /* TimerData+CoreDataClass.swift in Sources */,
 				56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */,
+				5664AA7C256EB37600C53BAA /* TimerData+CoreDataClass.swift in Sources */,
 				56B5670F24B4B77D00B5E424 /* Sound.swift in Sources */,
 				5659D4E624A5378C00CFDF66 /* KeyPad.swift in Sources */,
 				5659D4F024A63E3D00CFDF66 /* TimeHelper.swift in Sources */,

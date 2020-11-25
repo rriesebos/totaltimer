@@ -32,7 +32,7 @@ class NotificationManager {
         self.stopAlarmTimer()
     }
 
-    func setNotification(timerData: TimerData) {
+    func setNotification(timer: TimerData) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
             if let error = error {
                 os_log("%@", type: .error, error.localizedDescription)
@@ -43,23 +43,28 @@ class NotificationManager {
         self.removeNotification()
         
         let content = UNMutableNotificationContent()
-        content.title = "\(timerData.label) is ready!"
-        content.userInfo = ["TIMER_MANAGER_ID": timerData.id.uuidString]
+        content.title = "\(timer.label) is ready!"
+        content.userInfo = ["TIMER_MANAGER_ID": timer.id.uuidString]
         content.categoryIdentifier = "ALARM"
         
         // Attach sound to notification if a background task is not possible
-        if timerData.seconds >= self.maxBackgroundTime {
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("\(timerData.alarmSoundName).mp3"))
+        if timer.seconds >= self.maxBackgroundTime {
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("\(timer.alarmSoundName).mp3"))
         }
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timerData.seconds), repeats: false)
+        // Do not set notification if the timer has already ended
+        if timer.seconds <= 0 {
+            return
+        }
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timer.seconds), repeats: false)
 
         self.notificationID = UUID().uuidString
         let request = UNNotificationRequest(identifier: self.notificationID, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request)
         
-        self.startAlarmTimer(timerData: timerData)
+        self.startAlarmTimer(timer: timer)
     }
     
     private func stopAlarmTimer() {
@@ -69,20 +74,20 @@ class NotificationManager {
         self.endBackgroundTask()
     }
     
-    private func startAlarmTimer(timerData: TimerData) {
+    private func startAlarmTimer(timer: TimerData) {
         guard self.alarmTimer == nil else { return }
         
         self.endBackgroundTask()
         
         // Start background task if it is finished in time
-        if timerData.seconds < self.maxBackgroundTime {
+        if timer.seconds < self.maxBackgroundTime {
             self.bgTaskID = UIApplication.shared.beginBackgroundTask(expirationHandler: {
                 self.endBackgroundTask()
             })
         }
         
-        self.alarmTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timerData.seconds), repeats: false) { _ in
-            self.playSound(resourceName: timerData.alarmSoundName)
+        self.alarmTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timer.seconds), repeats: false) { _ in
+            self.playSound(resourceName: timer.alarmSoundName)
         }
     }
     

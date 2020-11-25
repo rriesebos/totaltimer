@@ -1,8 +1,9 @@
-////  TimerManager.swift
+////  TimerData+CoreDataClass.swift
 //  Timer
 //
-//  Created by R Riesebos on 28/06/2020.
+//  Created by R Riesebos on 25/11/2020.
 //  Copyright © 2020 rriesebos. All rights reserved.
+//
 //
 
 import Foundation
@@ -12,15 +13,10 @@ import Combine
 import AVFoundation
 import os.log
 
-class TimerManager: ObservableObject, Identifiable, Hashable {
-    
-    let id = UUID()
-    var timerData: TimerData? = nil
-    
-    @Published var label: String = ""
-    @Published var totalSeconds = 0
-    @Published var color: UIColor
-    @Published var alarmSoundName: String
+@objc(TimerData)
+public class TimerData: NSManagedObject, Identifiable {
+
+    public let id = UUID()
     
     @Published var timerLengthInSeconds = 0
     @Published var seconds = 0
@@ -36,46 +32,26 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
     private var notificationManager = NotificationManager()
     
     
-    init(label: String, totalSeconds: Int, color: UIColor, alarmSoundName: String = "alarm") {
-        self.label = label
-        self.totalSeconds = totalSeconds
+    override public init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
         
-        self.timerLengthInSeconds = totalSeconds
-        self.seconds = totalSeconds
-        
-        self.color = color
-        self.alarmSoundName = alarmSoundName
-    }
-    
-    init(timerData: TimerData) {
-        self.timerData = timerData
-        
-        self.label = timerData.label ?? ""
-        self.totalSeconds = Int(timerData.totalSeconds)
-        
-        self.timerLengthInSeconds = Int(timerData.totalSeconds)
-        self.seconds = Int(timerData.totalSeconds)
-        
-        self.color = timerData.color as! UIColor
-        self.alarmSoundName = timerData.alarmSoundName ?? Sound.defaultAlarmSound.name
+        self.timerLengthInSeconds = Int(totalSeconds)
+        self.seconds = Int(totalSeconds)
     }
     
     func set(seconds: Int) {
-        self.totalSeconds = seconds
+        self.totalSeconds = Int64(seconds)
         
         self.timerLengthInSeconds = seconds
         self.seconds = seconds
         
         self.progress = 0
+        
+        self.objectWillChange.send()
     }
     
     func save(managedObjectContext: NSManagedObjectContext) {
         managedObjectContext.perform {
-            self.timerData?.label = self.label
-            self.timerData?.totalSeconds = Int64(self.totalSeconds)
-            self.timerData?.color = self.color
-            self.timerData?.alarmSoundName = self.alarmSoundName
-
             do {
                 try managedObjectContext.save()
             } catch {
@@ -89,8 +65,8 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         
         self.notificationManager.reset()
         
-        self.timerLengthInSeconds = self.totalSeconds
-        self.seconds = self.totalSeconds
+        self.timerLengthInSeconds = Int(self.totalSeconds)
+        self.seconds = Int(self.totalSeconds)
         
         self.progress = 0
         
@@ -106,48 +82,51 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
     func addTime(seconds: Int) {
         self.timerLengthInSeconds = min(self.timerLengthInSeconds + seconds, TimeHelper.maxSeconds)
         self.seconds = min(self.seconds + seconds, TimeHelper.maxSeconds)
-        
-        self.notificationManager.setNotification(timerManager: self)
-        
+
+        self.notificationManager.setNotification(timerData: self)
+
         self.updateProgress()
     }
-    
+
     func subtractTime(seconds: Int) {
         self.timerLengthInSeconds = max(self.timerLengthInSeconds - seconds, TimeHelper.minSeconds)
         self.seconds = max(self.seconds - seconds, TimeHelper.minSeconds)
-        
+
         if self.seconds > 0 {
-            self.notificationManager.setNotification(timerManager: self)
+            self.notificationManager.setNotification(timerData: self)
         } else {
             // Remove pending notification and play sound
             self.notificationManager.removeNotification()
             self.notificationManager.playSound(resourceName: self.alarmSoundName)
         }
-        
+
         self.updateProgress()
     }
-    
+
     func decrement() {
         self.seconds -= 1
+        self.objectWillChange.send()
     }
-    
+
     func startTimer() {
         guard self.totalSeconds > 0 else {
             return
         }
-        
+
         if self.seconds == 0 {
             self.reset()
         }
-        
+
         self.timer = Timer.publish(every: 1, tolerance: 0.1, on: .main, in: .common)
         self.cancellable = self.timer?.autoconnect().sink { _ in
             self.updateTimer()
         }
-        
-        self.notificationManager.setNotification(timerManager: self)
-        
+
+        self.notificationManager.setNotification(timerData: self)
+
         self.isPlaying = true
+        
+        self.objectWillChange.send()
     }
     
     func stopTimer() {
@@ -163,6 +142,8 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
         }
         
         self.isPlaying = false
+        
+        self.objectWillChange.send()
     }
     
     func updateTimer() {
@@ -187,6 +168,8 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
     }
     
     private func updateProgress() {
+        self.objectWillChange.send()
+        
         guard self.timerLengthInSeconds > 0 else {
             self.progress = 1.0
             return
@@ -196,18 +179,14 @@ class TimerManager: ObservableObject, Identifiable, Hashable {
     }
     
     func setNotification() {
-        self.notificationManager.setNotification(timerManager: self)
+        self.notificationManager.setNotification(timerData: self)
     }
     
     func removeNotification() {
         self.notificationManager.removeNotification()
     }
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-    }
-    
-    static func == (lhs: TimerManager, rhs: TimerManager) -> Bool {
+    static func == (lhs: TimerData, rhs: TimerData) -> Bool {
         return lhs.id == rhs.id
     }
 }

@@ -25,7 +25,6 @@
 		5660B15724A8DFFE003A38BE /* TimerList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5660B15624A8DFFE003A38BE /* TimerList.swift */; };
 		5664AA3B256E883600C53BAA /* TimerData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5664AA39256E883600C53BAA /* TimerData+CoreDataClass.swift */; };
 		5664AA3C256E883600C53BAA /* TimerData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5664AA3A256E883600C53BAA /* TimerData+CoreDataProperties.swift */; };
-		5664AA5E256E8ED700C53BAA /* TimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5660B15424A8DCB6003A38BE /* TimerManager.swift */; };
 		56AFC30D24ACC43E003DE8BD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56AFC30C24ACC43E003DE8BD /* Colors.xcassets */; };
 		56AFC30F24ACC687003DE8BD /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC30E24ACC687003DE8BD /* ColorExtension.swift */; };
 		56AFC31124ACCFFE003DE8BD /* TimerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56AFC31024ACCFFE003DE8BD /* TimerEditView.swift */; };
@@ -98,7 +97,6 @@
 		565EAFD024A4EDD9005059C0 /* TimerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		565EAFD424A4EDD9005059C0 /* TimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerUITests.swift; sourceTree = "<group>"; };
 		565EAFD624A4EDD9005059C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5660B15424A8DCB6003A38BE /* TimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
 		5660B15624A8DFFE003A38BE /* TimerList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerList.swift; sourceTree = "<group>"; };
 		5664AA39256E883600C53BAA /* TimerData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimerData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5664AA3A256E883600C53BAA /* TimerData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimerData+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -165,8 +163,8 @@
 		5624C2BB24AB6C86001249D1 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				5664AA39256E883600C53BAA /* TimerData+CoreDataClass.swift */,
 				56F40E7A24E951FE004C2E7E /* SharedTimerManager.swift */,
-				5660B15424A8DCB6003A38BE /* TimerManager.swift */,
 				5659D4EF24A63E3D00CFDF66 /* TimeHelper.swift */,
 				5624C2BD24AB6E66001249D1 /* NotificationManager.swift */,
 			);
@@ -263,7 +261,6 @@
 		565EAFE424A4EE4E005059C0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5664AA39256E883600C53BAA /* TimerData+CoreDataClass.swift */,
 				5664AA3A256E883600C53BAA /* TimerData+CoreDataProperties.swift */,
 				565EAFB324A4EDD6005059C0 /* Timer.xcdatamodeld */,
 				56B5670E24B4B77D00B5E424 /* Sound.swift */,
@@ -509,7 +506,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				565EAFB024A4EDD6005059C0 /* AppDelegate.swift in Sources */,
-				5664AA5E256E8ED700C53BAA /* TimerManager.swift in Sources */,
 				56AFC31324ACD439003DE8BD /* TimerColorPicker.swift in Sources */,
 				56B5670C24B4AF5700B5E424 /* SoundPicker.swift in Sources */,
 				5664AA3B256E883600C53BAA /* TimerData+CoreDataClass.swift in Sources */,

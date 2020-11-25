@@ -106,8 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if case response.actionIdentifier = UNNotificationDismissActionIdentifier {
             // Reset timer when the alarm notification is dismissed
-            let timerManager = self.sharedTimerManager.timerManagers[id]
-            timerManager?.reset()
+            let timer = self.sharedTimerManager.timers[id]
+            timer?.reset()
         }
         
         completionHandler()
@@ -115,8 +115,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Invalidate all timers when app is closed
-        for timerManager in self.sharedTimerManager.timerManagers.values {
-            timerManager.reset()
+        for timer in self.sharedTimerManager.timers.values {
+            timer.reset()
         }
     }
 

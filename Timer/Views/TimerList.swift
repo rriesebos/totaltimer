@@ -23,38 +23,36 @@ struct TimerList: View {
             NSSortDescriptor(keyPath: \TimerData.label, ascending: true),
             NSSortDescriptor(keyPath: \TimerData.totalSeconds, ascending: true)
         ]
-    ) var timersData: FetchedResults<TimerData>
+    ) var timers: FetchedResults<TimerData>
     
     @EnvironmentObject var sharedTimerManager: SharedTimerManager
     
-    @State private var timerManagers: [TimerManager] = []
     @State private var firstFetch = true
     
     @State private var showTimePicker = false
-    @State private var timerCount = UserDefaults.standard.integer(forKey: "TimerCount")
+    @State private var timerCount = 0
     
     @State private var showActive = false
     
     @State private var isSelecting = false
-    @State private var selection = Set<TimerManager>()
+    @State private var selection = Set<TimerData>()
     
     
     // MARK: Methods
     private func addTimer(seconds: Int) {
+        self.updateTimerCount()
+        
         let timerData = TimerData(context: self.managedObjectContext)
         timerData.label = "Timer \(self.timerCount + 1)"
         timerData.totalSeconds = Int64(seconds)
         timerData.color = UIColor.timerColors[self.timerCount % UIColor.timerColors.count]
         timerData.dateAdded = Date()
         
-        let timerManager = TimerManager(timerData: timerData)
-        
         // Add timer to timerManager list and sharedTimerManager
-        self.timerManagers.append(timerManager)
-        self.sharedTimerManager.timerManagers[timerManager.id.uuidString] = timerManager
+        self.sharedTimerManager.timers[timerData.id.uuidString] = timerData
         
         // Start timer after adding
-        timerManager.startTimer()
+        timerData.startTimer()
         
         // Save core data object
         do {
@@ -62,51 +60,23 @@ struct TimerList: View {
         } catch {
             os_log("%@", type: .error, error.localizedDescription)
         }
-
-        // Increment and save timer counter
-        self.timerCount += 1
-        UserDefaults.standard.set(self.timerCount, forKey: "TimerCount")
     }
     
-    private func deleteTimers(timerManagers: [TimerManager], offsets: IndexSet) {
+    private func deleteTimers(timers: [TimerData], offsets: IndexSet) {
         for index in offsets {
-            let timerManager = timerManagers[index]
+            let timer = timers[index]
             
             // Remove pending notification
-            timerManager.removeNotification()
+            timer.removeNotification()
             
             // Stop alarm
-            timerManager.reset()
+            timer.reset()
+            
+            self.sharedTimerManager.timers.removeValue(forKey: timer.id.uuidString)
             
             // Delete core data object
-            if let timerData = timerManager.timerData {
-                self.managedObjectContext.delete(timerData)
-            }
-            
-            // Delete timerManager from (filtered) list
-            if let firstIndex = self.timerManagers.firstIndex(where: { $0.id == timerManager.id }) {
-                // Remove timer from timerManager list and sharedTimerManager
-                self.timerManagers.remove(at: firstIndex)
-                self.sharedTimerManager.timerManagers.removeValue(forKey: timerManager.id.uuidString)
-                
-                // Decrement timer counter if firstIndex of the filtered list is the last timer
-                if self.showActive && firstIndex == self.timerManagers.count {
-                    self.timerCount -= 1
-                }
-            }
+            self.managedObjectContext.delete(timer)
         }
-        
-        // Decrement timerCount if last timer is deleted
-        if offsets.contains(self.timerManagers.count) && !self.showActive {
-            self.timerCount -= 1
-        }
-        
-        // Reset timerCount if all timers are deleted
-        if self.timerManagers.isEmpty {
-            self.timerCount = 0
-        }
-        
-        UserDefaults.standard.set(self.timerCount, forKey: "TimerCount")
 
         do {
             try self.managedObjectContext.save()
@@ -115,19 +85,30 @@ struct TimerList: View {
         }
     }
     
+    private func updateTimerCount() {
+        if self.timers.isEmpty {
+            self.timerCount = 0
+            return
+        }
+        
+        // Set current count to the count (+ 1) of the previous timer
+        let previousCount = Int(self.timers.last!.label.components(separatedBy: CharacterSet.decimalDigits.inverted).joined())
+        self.timerCount = previousCount ?? 0
+    }
+    
     // MARK: View
     var body: some View {
-        let timerManagers = self.timerManagers.filter { !self.showActive || $0.isPlaying }
+        let timers = self.timers.filter { !self.showActive || $0.isPlaying }
         
         return GeometryReader { geometry in
             NavigationView {
                 List(selection: self.$selection) {
-                    ForEach(timerManagers, id: \.self) { timerManager in
-                        TimerRow(timerManager: timerManager)
+                    ForEach(timers, id: \.self) { timer in
+                        TimerRow(timer: timer)
                             .disabled(self.isSelecting)
                     }
                     .onDelete { offsets in
-                        self.deleteTimers(timerManagers: timerManagers, offsets: offsets)
+                        self.deleteTimers(timers: timers, offsets: offsets)
                     }
                 }
                 .environment(\.editMode, self.isSelecting ? .constant(.active) : .constant(.inactive))
@@ -141,7 +122,7 @@ struct TimerList: View {
                         Text(self.isSelecting ? "Cancel" : "Select")
                     }
                     .frame(width: 64, alignment: .leading)
-                    .disabled(self.timerManagers.isEmpty),
+                    .disabled(self.timers.isEmpty),
                     trailing: HStack(spacing: 0) {
                         Picker(selection: self.$showActive, label: Text("Toggle between all and active")) {
                             Text("All").tag(false)
@@ -203,14 +184,9 @@ struct TimerList: View {
             .onAppear {
                 guard self.firstFetch else { return }
                 
-                // Initialize timerManager list with stored timers
-                self.timerManagers = self.timersData.map {
-                    TimerManager(timerData: $0)
-                }
-                
                 // Add timers to the sharedTimerManager
-                for timerManager in self.timerManagers {
-                    self.sharedTimerManager.timerManagers[timerManager.id.uuidString] = timerManager
+                for timer in self.timers {
+                    self.sharedTimerManager.timers[timer.id.uuidString] = timer
                 }
                 
                 self.firstFetch = false
@@ -235,55 +211,57 @@ struct TimerList_Previews: PreviewProvider {
 // MARK: View - TimerRow
 struct TimerRow: View {
     
-    @ObservedObject var timerManager: TimerManager
+    @ObservedObject var timer: TimerData
     @State private var exitTime = Date()
     
     
     var body: some View {
-        NavigationLink(destination: TimerDetailView(timerManager: self.timerManager)) {
+        return NavigationLink(destination: TimerDetailView(timer: self.timer)) {
             HStack(alignment: .center, spacing: 24) {
                 ZStack {
-                    ProgressCircle(color: Color(self.timerManager.color), progress: self.timerManager.progress, defaultLineWidth: 4, progressLineWidth: 4)
+                    // Optional casting of color to UIColor to account for delay in removing core data object
+                    // during this delay the color property is set to nil
+                    ProgressCircle(color: Color(self.timer.color as? UIColor ?? UIColor.blue), progress: self.timer.progress, defaultLineWidth: 4, progressLineWidth: 4)
                             .frame(width: 44, height: 44)
                     
-                    Button(action: { self.timerManager.isPlaying ? self.timerManager.stopTimer() :
-                        self.timerManager.seconds == 0 ? self.timerManager.reset() : self.timerManager.startTimer() }) {
-                        Image(systemName: self.timerManager.isPlaying ? "pause.circle.fill" :
-                            self.timerManager.seconds == 0 ? "arrow.counterclockwise.circle.fill" : "play.circle.fill")
+                    Button(action: { self.timer.isPlaying ? self.timer.stopTimer() :
+                        self.timer.seconds == 0 ? self.timer.reset() : self.timer.startTimer() }) {
+                        Image(systemName: self.timer.isPlaying ? "pause.circle.fill" :
+                            self.timer.seconds == 0 ? "arrow.counterclockwise.circle.fill" : "play.circle.fill")
                             .font(.system(size: 42))
                     }
-                    .disabled(self.timerManager.totalSeconds == 0)
-                    .foregroundColor(self.timerManager.totalSeconds == 0 ? Color.gray : Color(self.timerManager.color))
+                    .disabled(self.timer.totalSeconds == 0)
+                    .foregroundColor(self.timer.totalSeconds == 0 ? Color.gray : Color(self.timer.color as! UIColor))
                     .buttonStyle(PlainButtonStyle())
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(self.timerManager.label)
+                    Text(self.timer.label)
                         .lineLimit(1)
                         .padding(.trailing, 8)
-                    Text(TimeHelper.secondsToTimeString(seconds: self.timerManager.seconds))
+                    Text(TimeHelper.secondsToTimeString(seconds: self.timer.seconds))
                         .foregroundColor(Color.secondary)
                 }
                 .font(.system(size: 20))
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                self.timerManager.isActive = false
+                self.timer.isActive = false
                 
-                if self.timerManager.isPlaying {
+                if self.timer.isPlaying {
                     self.exitTime = Date()
                     
                     // Re-set notification in case the time is less than the allowed background time
-                    self.timerManager.setNotification()
+                    self.timer.setNotification()
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                if self.timerManager.isPlaying {
+                if self.timer.isPlaying {
                     // Update time using elapsed time when returning from background
                     let elapsedSeconds: Double = -self.exitTime.timeIntervalSinceNow
-                    self.timerManager.setTime(seconds: lround(Double(self.timerManager.seconds) - elapsedSeconds))
+                    self.timer.setTime(seconds: lround(Double(self.timer.seconds) - elapsedSeconds))
                 }
                 
-                self.timerManager.isActive = true
+                self.timer.isActive = true
             }
         }
     }

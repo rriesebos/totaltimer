@@ -9,5 +9,5 @@ import Foundation
 
 class SharedTimerManager: ObservableObject {
     
-    @Published var timerManagers: [String: TimerManager] = [:]
+    @Published var timers: [String: TimerData] = [:]
 }

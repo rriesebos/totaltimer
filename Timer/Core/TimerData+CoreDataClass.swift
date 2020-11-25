@@ -16,6 +16,7 @@ import os.log
 @objc(TimerData)
 public class TimerData: NSManagedObject, Identifiable {
 
+    // MARK: Properties
     public let id = UUID()
     
     @Published var timerLengthInSeconds = 0
@@ -32,6 +33,7 @@ public class TimerData: NSManagedObject, Identifiable {
     private var notificationManager = NotificationManager()
     
     
+    // MARK: Initializer
     override public init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
         
@@ -39,6 +41,7 @@ public class TimerData: NSManagedObject, Identifiable {
         self.seconds = Int(totalSeconds)
     }
     
+    // MARK: Methods
     func set(seconds: Int) {
         self.totalSeconds = Int64(seconds)
         
@@ -83,7 +86,7 @@ public class TimerData: NSManagedObject, Identifiable {
         self.timerLengthInSeconds = min(self.timerLengthInSeconds + seconds, TimeHelper.maxSeconds)
         self.seconds = min(self.seconds + seconds, TimeHelper.maxSeconds)
 
-        self.notificationManager.setNotification(timerData: self)
+        self.notificationManager.setNotification(timer: self)
 
         self.updateProgress()
     }
@@ -93,7 +96,7 @@ public class TimerData: NSManagedObject, Identifiable {
         self.seconds = max(self.seconds - seconds, TimeHelper.minSeconds)
 
         if self.seconds > 0 {
-            self.notificationManager.setNotification(timerData: self)
+            self.notificationManager.setNotification(timer: self)
         } else {
             // Remove pending notification and play sound
             self.notificationManager.removeNotification()
@@ -122,7 +125,7 @@ public class TimerData: NSManagedObject, Identifiable {
             self.updateTimer()
         }
 
-        self.notificationManager.setNotification(timerData: self)
+        self.notificationManager.setNotification(timer: self)
 
         self.isPlaying = true
         
@@ -179,7 +182,7 @@ public class TimerData: NSManagedObject, Identifiable {
     }
     
     func setNotification() {
-        self.notificationManager.setNotification(timerData: self)
+        self.notificationManager.setNotification(timer: self)
     }
     
     func removeNotification() {

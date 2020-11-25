@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="TimerData" representedClassName="TimerData" syncable="YES" codeGenerationType="class">
-        <attribute name="alarmSoundName" optional="YES" attributeType="String"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="19H15" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="TimerData" representedClassName="TimerData" syncable="YES">
+        <attribute name="alarmSoundName" optional="YES" attributeType="String" defaultValueString="classic"/>
         <attribute name="color" optional="YES" attributeType="Transformable"/>
         <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="label" optional="YES" attributeType="String"/>
+        <attribute name="label" optional="YES" attributeType="String" defaultValueString="Timer"/>
         <attribute name="totalSeconds" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>

@@ -11,13 +11,12 @@ import AVFoundation
 import SwiftUI
 import os.log
 
-var audioPlayer: AVAudioPlayer?
-
 class NotificationManager {
     
     // MARK: Properties
     private var notificationID: String = UUID().uuidString
     private var alarmTimer: Timer?
+    private var audioPlayers: [String: AVAudioPlayer] = [:]
     
     private var bgTaskID: UIBackgroundTaskIdentifier?
     
@@ -92,7 +91,10 @@ class NotificationManager {
     }
     
     private func stopSound() {
+        let audioPlayer = self.audioPlayers[self.notificationID]
         audioPlayer?.stop()
+        
+        self.audioPlayers[self.notificationID] = nil
     }
     
     func playSound(resourceName: String) {
@@ -102,10 +104,11 @@ class NotificationManager {
         // Start playing sound on a background queue
         DispatchQueue.global(qos: .background).async {
             do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                let audioPlayer = try AVAudioPlayer(contentsOf: url)
+                self.audioPlayers[self.notificationID] = audioPlayer
                 
-                audioPlayer?.numberOfLoops = -1
-                audioPlayer?.play()
+                audioPlayer.numberOfLoops = -1
+                audioPlayer.play()
             } catch {
                 os_log("%@", type: .error, error.localizedDescription)
             }

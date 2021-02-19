@@ -112,7 +112,7 @@ struct TimerList: View {
         return GeometryReader { geometry in
             NavigationView {
                 List(selection: self.$selection) {
-                    ForEach(timers) { timer in
+                    ForEach(timers, id: \.self) { timer in
                         TimerRow(timer: timer)
                             .disabled(self.isSelecting)
                     }

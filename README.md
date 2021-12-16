@@ -9,6 +9,8 @@
     <img src="https://raw.githubusercontent.com/rriesebos/totaltimer/master/Screenshots/iPhone%206.5%20inch/screenshot5.png?token=AGUKEE7FP3N45ESAJHCLSWTBYOR7O" alt="Filter active timers" width="100"/>
       <img src="https://raw.githubusercontent.com/rriesebos/totaltimer/master/Screenshots/iPhone%206.5%20inch/screenshot6.png?token=AGUKEE44UZLNQBYLRNAK3QDBYOR7O" alt="Customize your timers" width="100"/>
       <img src="https://raw.githubusercontent.com/rriesebos/totaltimer/master/Screenshots/iPhone%206.5%20inch/screenshot7.png?token=AGUKEE25YEXWMUPZPD55VR3BYOR7Q" alt="Pick your favorite alarm sound" width="100"/>
+  
+**Note: TotalTimer is no longer available in the App Store since my (paid) developer program membership has expired.**
 
 ### Key functionality includes:
 - Add as many timers as you want
